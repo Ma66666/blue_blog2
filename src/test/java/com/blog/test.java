@@ -1,5 +1,6 @@
 package com.blog;
 
+import com.alibaba.fastjson.JSONObject;
 import com.blog.dao.UserMapper;
 import com.blog.entity.User;
 import org.junit.Test;
@@ -23,11 +24,14 @@ public class test {
 
     @Test
     public void test(){
-        System.out.println(userMapper.selectByphone("17336122192"));
+         User user = userMapper.selectByphone("17336122191");
+
+        System.out.println( user.getCreateTime());
     }
     @Test
     public void insert(){
         User user = new User();
         System.out.println(userMapper.insertUser(user));
     }
+
 }

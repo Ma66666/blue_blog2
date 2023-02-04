@@ -1,7 +1,9 @@
 package com.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -26,12 +28,19 @@ public class User {
     private String phone;
 
     @ApiModelProperty(value = "状态 0：正常 1：vip 2：封号 3:管理员")
-    private int status;
+    private String status;
+
+    @ApiModelProperty(value ="男:1 女:2 无性别:3" )
+    private String  sex;
 
     @ApiModelProperty(value = "用户头像")
     private String headerUrl;
 
+
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    @ApiModelProperty(value = "个性签名")
+    private String pSignature;
 
 }

@@ -8,7 +8,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 public class BlueBlogApplication {
     public static void main(String[] args) {
-
         SpringApplication.run(BlueBlogApplication.class,args);
         System.out.println("=======项目启动成功，欢迎使用=======");
     }

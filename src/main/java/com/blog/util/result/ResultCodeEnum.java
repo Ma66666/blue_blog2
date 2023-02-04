@@ -1,4 +1,4 @@
-package com.blog.result;
+package com.blog.util.result;
 
 import lombok.Getter;
 
@@ -14,6 +14,7 @@ public enum ResultCodeEnum {
     SERVICE_ERROR(203, "服务异常"),
     DATA_ERROR(204, "数据异常"),
     DATA_UPDATE_ERROR(205, "数据版本异常"),
+    Header_Url_ERROR(206,"请更换JPG或PNG图片"),
 
     LOGIN_AUTH(208, "未登陆"),
     PERMISSION(209, "没有权限"),

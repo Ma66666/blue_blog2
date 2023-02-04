@@ -28,6 +28,8 @@ public class QiNiuYunConfig {
     private String bucket;
     @Value("${qiniu.bucket.header.url}")
     private String path;
+    @Value("${qiniu.bucket.header.name1}")
+    private String bucket1;
     public String uploadImgToQiNiu(FileInputStream file, String filename) {
         if(!filename.contains(".jpg")&&!filename.contains(".png")){
            return "false";
@@ -40,6 +42,7 @@ public class QiNiuYunConfig {
         Auth auth = Auth.create(accessKey, secretKey);
         try {
             String upToken = auth.uploadToken(bucket);
+            System.out.println(upToken);
             try {
                 Response response = uploadManager.put(file, filename, upToken, null, null);
                 // 解析上传成功的结果
@@ -63,6 +66,8 @@ public class QiNiuYunConfig {
         return "false";
     }
 
+
+
     public void deleteFile(String key){
         //创建凭证
         Auth auth = Auth.create(accessKey, secretKey);
@@ -75,6 +80,17 @@ public class QiNiuYunConfig {
             System.err.println(ex.response.toString());
         }
     }
-
+    public void deleteFile1(String key){
+        //创建凭证
+        Auth auth = Auth.create(accessKey, secretKey);
+        BucketManager bucketManager = new BucketManager(auth, new Configuration());
+        try {
+            bucketManager.delete(bucket1, key);
+        } catch (QiniuException ex) {
+            //如果遇到异常，说明删除失败
+            System.err.println(ex.code());
+            System.err.println(ex.response.toString());
+        }
+    }
 
 }

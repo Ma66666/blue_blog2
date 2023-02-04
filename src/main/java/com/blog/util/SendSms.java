@@ -25,8 +25,10 @@ public class SendSms {
     private String sdkAppId1;
     @Value("${tx.key.signName}")
     private String signName1;
-    @Value("${tx.key.templateId}")
-    private String templateId1;
+//    @Value("${tx.key.templateId1}")
+//    private String templateId1;
+//    @Value(("${tx.key.templateId2}"))
+//    private String templateId2;
 
     /**
      * @param phoneNum 短信发送的手机号
@@ -96,7 +98,7 @@ public class SendSms {
 
             /* 模板 ID: 必须填写已审核通过的模板 ID */
             // 模板 ID 可前往 [国内短信](https://console.cloud.tencent.com/smsv2/csms-template) 或 [国际/港澳台短信](https://console.cloud.tencent.com/smsv2/isms-template) 的正文模板管理查看
-            String templateId = templateId1;
+            String templateId = templateCode;
             req.setTemplateId(templateId);
 
             /* 模板参数: 模板参数的个数需要与 TemplateId 对应模板的变量个数保持一致，若无模板参数，则设置为空 */

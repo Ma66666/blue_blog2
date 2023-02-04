@@ -1,5 +1,6 @@
-package com.blog.result;
+package com.blog.util.ExceptionHandler;
 
+import com.blog.util.result.ResultCodeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class BlogException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "YyghException{" +
+        return "BlogException{" +
                 "code=" + code +
                 ", message=" + this.getMessage() +
                 '}';

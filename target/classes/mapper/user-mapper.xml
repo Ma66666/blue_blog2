@@ -4,17 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blog.dao.UserMapper">
     <sql id="insertFields">
-         accountId,username, password, salt, phone, status, header_url, create_time
+         accountId,username, password, salt, phone, status, header_url, create_time,sex
     </sql>
 
     <sql id="selectFields">
-         id,accountId,username,password, salt,phone,status,header_url, create_time
+         id,accountId,username,password, salt,phone,status,header_url, create_time,sex,p_signature
     </sql>
+
+
+
 
     <insert id="insertUser" parameterType="User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
-        values(#{accountId},#{username}, #{password}, #{salt}, #{phone},  #{status},  #{headerUrl}, #{createTime})
+        values(#{accountId},#{username}, #{password}, #{salt}, #{phone},  #{status},  #{headerUrl}, #{createTime},#{sex})
     </insert>
+    <update id="updateUserInfo">
+        update user set username = #{username} , sex =#{sex},p_signature = #{signature} where accountId = #{accountId}
+    </update>
+    <update id="updateUserImg">
+        update user set header_url = #{headerUrl} where accountId = #{accountId}
+    </update>
 
     <select id="selectByAccountId" resultType="com.blog.entity.User">
         select <include refid="selectFields"></include> from user

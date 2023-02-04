@@ -1,5 +1,6 @@
-package com.blog.result;
+package com.blog.util.result;
 
+import com.blog.util.ExceptionHandler.BlogException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -73,6 +74,10 @@ public class Result<T> {
         return build(data, ResultCodeEnum.FAIL);
     }
 
+    public static<T> Result<T> fail(BlogException blogException){
+        Result<T> result = build(blogException.getCode(),blogException.getMessage());
+        return result;
+    }
     public Result<T> message(String msg){
         this.setMessage(msg);
         return this;

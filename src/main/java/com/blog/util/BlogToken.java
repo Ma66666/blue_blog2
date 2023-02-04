@@ -1,4 +1,4 @@
-package com.blog.result;
+package com.blog.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,9 +9,9 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Map;
-public class blog_token {
+public class BlogToken {
 
-    private static Logger log = LoggerFactory.getLogger(blog_token.class);
+    private static Logger log = LoggerFactory.getLogger(BlogToken.class);
 
     //该方法使用HS256算法和Secret:bankgl生成signKey
     private static Key getKeyInstance() {

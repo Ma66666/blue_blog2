@@ -1,22 +1,31 @@
 package com.blog.service.Impl;
 
+import com.blog.config.QiNiuYunConfig;
 import com.blog.dao.UserMapper;
 import com.blog.entity.User;
+import com.blog.entity.Vo.UserVo;
 import com.blog.entity.Vo.loginVo;
-import com.blog.entity.Vo.registerVo;
-import com.blog.result.BlogException;
-import com.blog.result.ResultCodeEnum;
+import com.blog.entity.Vo.RegisterVo;
 import com.blog.service.UserService;
+import com.blog.util.BlogToken;
 import com.blog.util.CommunityUtil;
+import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.GetSetRedis;
 import com.blog.util.SendSms;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import static com.blog.util.result.ResultCodeEnum.Header_Url_ERROR;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -28,34 +37,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GetSetRedis getSetRedis;
 
+    @Autowired
+    private QiNiuYunConfig qiNiuYunConfig;
+    @Value("${qiniu.bucket.header.url}")
+    private String path;
+
     @Override
     public User findUserByAccountId(String accountId) {
         return userMapper.selectByAccountId(accountId,"");
     }
 
     @Override
-    public Map<String,Object> register(registerVo registervo) {
-        System.out.println(registervo.getPassword());
-        System.out.println(registervo.getPhone());
-        System.out.println(registervo.getUsername());
+    public Map<String,Object> register(RegisterVo registervo) {
         Map<String,Object> map = new HashMap<>();
-        if (registervo == null){
-            throw new BlogException(ResultCodeEnum.FETCH_USERINFO_ERROR);
-        }
-        if (StringUtils.isBlank(registervo.getUsername())){
-            map.put("usernameMsg","账号不能为空");
-            return map;
-        }
-        if (StringUtils.isBlank(registervo.getPassword())){
-            map.put("passwordMsg","密码不能为空");
-            return map;
-        }
-
-        if (StringUtils.isBlank(registervo.getPhone())){
-            map.put("phoneMsg","手机号不能为空");
-            return map;
-        }
-
         //判断账号是否存在
         User user1 = userMapper.selectByphone(registervo.getPhone());
         if (user1 !=null){
@@ -69,8 +63,9 @@ public class UserServiceImpl implements UserService {
             user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
             user.setPassword(CommunityUtil.md5(registervo.getPassword()+ user.getSalt()));
             user.setPhone(registervo.getPhone());
-            user.setStatus(0);
-            user.setHeaderUrl(String.format("http://images.nowcoder.com/head/22t.png"));
+            user.setStatus("0");
+            user.setSex(registervo.getSex());
+            user.setHeaderUrl(String.format("http://qn.yxwhzj6.top/moren.png"));
             user.setCreateTime(new Date());
             userMapper.insertUser(user);
             map.put(user.getPhone(),"插入成功");
@@ -79,7 +74,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean send(String phoneNum, String templateCode, String code,String code2) {
-
         return sendSms.send(phoneNum,templateCode,code,code2);
     }
 
@@ -93,10 +87,69 @@ public class UserServiceImpl implements UserService {
         String s = CommunityUtil.md5(loginuser.getPassword()+user.getSalt());
         if (user.getPassword().equals(s)||
                 loginuser.getCode().equals(getSetRedis.getValue(loginuser.getPhone()))){
+
             return true;
         }
 
         return false;
     }
+
+    @Override
+    public void settoken(String token,loginVo loginVo) {
+       User user = userMapper.selectByAccountId(loginVo.getAccountId(), loginVo.getPhone());
+        UserVo userVo = new UserVo();
+        userVo.setUsername(user.getUsername());
+        userVo.setAccountId(user.getAccountId());
+        userVo.setHeaderUrl(user.getHeaderUrl());
+        userVo.setCreateTime(user.getCreateTime());
+        userVo.setSex(user.getSex());
+        userVo.setStatus(user.getStatus());
+        userVo.setSignature(user.getPSignature());
+        getSetRedis.setToken(token,userVo);
+    }
+
+    @Override
+    public Map<String, Object> updateUserInfo(String token,UserVo userVo) {
+        Map<String,Object> map = new HashMap<>();
+        System.out.println(userVo.getHeaderUrl());
+        System.out.println(userVo.getSex());
+        if (userMapper.updateUserInfo(userVo) == 1){
+            map.put("userMsg","修改成功");
+            getSetRedis.setToken(token,userVo);
+
+            return map;
+        }
+        map.put("userMsg","修改失败");
+        return map;
+    }
+
+    /**
+     *
+     * @param headerImage 图片文件
+     * @param accountId   用户ID
+     * @return
+     */
+    @Override
+    public boolean updateHeaderUrl(MultipartFile headerImage,String accountId) throws IOException {
+        String filename = headerImage.getOriginalFilename();
+        FileInputStream inputStream = (FileInputStream) headerImage.getInputStream();
+        //为文件重命名：uuid+filename
+        filename = UUID.randomUUID()+ filename;
+        String link = qiNiuYunConfig.uploadImgToQiNiu(inputStream, filename);
+        if (link.equals("false")){
+            throw new BlogException( Header_Url_ERROR);
+        }
+        String url = "http://"+path+"/"+filename;
+       User user = userMapper.selectByAccountId(accountId,"");
+        //七牛云删除只要图片名称，所以把域名去掉
+        String deleteurl = user.getHeaderUrl().replace("http://qn.yxwhzj6.top/","");
+        qiNiuYunConfig.deleteFile(deleteurl);
+       int i = userMapper.updateUserImg(accountId,url);
+       if (i==1){
+           return true;
+       }
+        return false;
+    }
+
 
 }
