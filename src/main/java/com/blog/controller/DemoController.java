@@ -2,7 +2,10 @@ package com.blog.controller;
 
 import com.blog.config.QiNiuYunConfig;
 import com.blog.dao.UserMapper;
+import com.blog.entity.Blog;
+import com.blog.entity.Dto.BlogDto;
 import com.blog.entity.User;
+import com.blog.service.BlogService;
 import com.blog.util.BlogToken;
 import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.result.Result;
@@ -43,6 +46,8 @@ public class DemoController {
     private String secretKey;
     @Value("${qiniu.bucket.header.name1}")
     private String bucket;
+    @Autowired
+    private BlogService blogService;
 
 
     @Autowired
@@ -108,6 +113,28 @@ public class DemoController {
     public Result deleteImg(@RequestParam(value = "Img")String Img){
         qiNiuYunConfig.deleteFile1(Img);
         return Result.ok("删除成功");
+    }
+
+    @PostMapping("/saveBlog")
+    public Result saveBlog(@RequestParam(value = "title")String title,
+                           @RequestParam(value = "content")String content,
+                           @RequestParam(value = "cover")String cover,
+                           @RequestParam(value = "ImgList")List<Object> ImgList,
+                           @RequestParam(value = "type") int type,
+                             HttpServletRequest httpServletRequest
+                           ){
+        String token = httpServletRequest.getHeader("Authorization");
+        Map<String,Object> map = BlogToken.parserJavaWebToken(token);
+        String accountId = (String) map.get("accountId");
+        blogService.insertBlog(title,content,cover,ImgList,type,accountId);
+//        System.out.println(title);
+//        System.out.println(content);
+//        System.out.println(cover);
+//        System.out.println(type);
+
+//       System.out.println("我是blog1"+blog.getImage1());
+
+        return Result.ok();
     }
 
 }

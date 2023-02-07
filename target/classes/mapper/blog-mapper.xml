@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.BlogMapper">
+    <sql id="selectFields">
+        id,accountId,title,content,hot,type,create_time,update_time,topic,tag, cover, image1
+, image2, image3, image4, image5, image6, image7, image8, image9
+    </sql>
+
+    <sql id="insertFields">
+        accountId, title, content, hot, type, create_time, update_time, cover, image1
+, image2, image3, image4, image5, image6, image7, image8, image9
+    </sql>
+
+    <insert id="insertBlog" parameterType="Blog" keyProperty="id" >
+        insert into blog (<include refid="insertFields"></include>) values
+       (#{accountId},#{title},#{content},#{hot},#{type},#{createTime},#{updateTime},#{cover},#{image1},
+        #{image2},#{image3},#{image4},#{image5},#{image6},#{image8},#{image8},#{image9})
+    </insert>
+
+    <select id="queryById" resultType="com.blog.entity.Blog">
+        select <include refid="selectFields"></include> from blog where id = #{id}
+    </select>
+
+</mapper>

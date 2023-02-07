@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class BlogDto {
@@ -17,9 +18,6 @@ public class BlogDto {
     @ApiModelProperty(value = "博客内容")
     private String content;
 
-    @ApiModelProperty(value = "博客热度")
-    private String hot;
-
     @ApiModelProperty(value = "博客状态 0：草稿 1：正常 2：置顶 3删除")
     private String type;
 
@@ -32,32 +30,9 @@ public class BlogDto {
     @ApiModelProperty(value = "封面")
     private String cover;
 
-    @ApiModelProperty(value = "图片1")
-    private String image1;
+    @ApiModelProperty(value = "图片集合")
+    private List<Object> ImgList;
 
-    @ApiModelProperty(value = "图片2")
-    private String image2;
-
-    @ApiModelProperty(value = "图片3")
-    private String image3;
-
-    @ApiModelProperty(value = "图片4")
-    private String image4;
-
-    @ApiModelProperty(value = "图片5")
-    private String image5;
-
-    @ApiModelProperty(value = "图片6")
-    private String image6;
-
-    @ApiModelProperty(value = "图片7")
-    private String image7;
-
-    @ApiModelProperty(value = "图片8")
-    private String image8;
-
-    @ApiModelProperty(value = "图片9")
-    private String image9;
 
 
 }
