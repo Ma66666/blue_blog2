@@ -6,6 +6,7 @@ import com.blog.entity.Blog;
 import com.blog.entity.Dto.BlogDto;
 import com.blog.entity.User;
 import com.blog.service.BlogService;
+import com.blog.service.CommentService;
 import com.blog.util.BlogToken;
 import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.result.Result;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -48,6 +50,9 @@ public class DemoController {
     private String bucket;
     @Autowired
     private BlogService blogService;
+
+    @Resource
+    private CommentService commentService;
     
 
 
@@ -137,9 +142,13 @@ public class DemoController {
 
         return Result.ok();
     }
-    @GetMapping("GetBlogAndComment")
-    public Result GetBlogAndComment(int blogId){
 
+    @GetMapping(value = "GetBlogAndComment")
+    public Result GetBlogAndComment(int blogId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("博客内容",blogService.QueryBlog(blogId));
+        map.put("评论区",commentService.queryComment(blogId,0));
+return Result.ok(map);
     }
 
 }

@@ -2,6 +2,7 @@ package com.blog.service.Impl;
 
 import com.blog.dao.BlogMapper;
 import com.blog.entity.Blog;
+import com.blog.entity.Vo.BlogVo;
 import com.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,10 @@ public class BlogServiceImpl implements BlogService {
         blog.setCreateTime(new Date());
         blog.setTitle(title);
         return blogMapper.insertBlog(blog);
+    }
+
+    @Override
+    public BlogVo QueryBlog(int blogId) {
+        return blogMapper.queryById(blogId);
     }
 }
