@@ -48,6 +48,7 @@ public class DemoController {
     private String bucket;
     @Autowired
     private BlogService blogService;
+    
 
 
     @Autowired
@@ -97,7 +98,7 @@ public class DemoController {
    // }
    @ApiOperation(value = "获取七牛云token")
     @GetMapping(value = "policy")
-    public Result policy(){
+    public Result Policy(){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dir = sdf.format(new Date());
@@ -110,13 +111,13 @@ public class DemoController {
     }
 
     @PostMapping ("/delectImg")
-    public Result deleteImg(@RequestParam(value = "Img")String Img){
+    public Result DeleteImg(@RequestParam(value = "Img")String Img){
         qiNiuYunConfig.deleteFile1(Img);
         return Result.ok("删除成功");
     }
 
     @PostMapping("/saveBlog")
-    public Result saveBlog(@RequestParam(value = "title")String title,
+    public Result SaveBlog(@RequestParam(value = "title")String title,
                            @RequestParam(value = "content")String content,
                            @RequestParam(value = "cover")String cover,
                            @RequestParam(value = "ImgList")List<Object> ImgList,
@@ -135,6 +136,10 @@ public class DemoController {
 //       System.out.println("我是blog1"+blog.getImage1());
 
         return Result.ok();
+    }
+    @GetMapping("GetBlogAndComment")
+    public Result GetBlogAndComment(int blogId){
+
     }
 
 }

@@ -1,14 +1,14 @@
-package com.blog.entity;
+package com.blog.entity.Vo;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class Comment {
-
+public class CommentVo {
     @ApiModelProperty(value = "ID主键")
     private int id;
 
@@ -36,7 +36,17 @@ public class Comment {
     @ApiModelProperty(value = "被回复用户的名称")
     private String replyUserName;
 
+    @ApiModelProperty(value = "用户头像")
+    private String headerUrl;
 
+    private  List<CommentVo> commentVoList ;
+
+    public CommentVo() {
+      commentVoList = new ArrayList<>();
+    }
+    public void addCommentVo(CommentVo commentVo){
+        commentVoList.add(commentVo);
+    }
 
 
 }

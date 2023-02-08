@@ -10,4 +10,6 @@ public interface BlogService {
     int insertBlog(String title, String content, String cover, List<Object> ImgList, int type,String accountId);
 
 
+
+
 }
