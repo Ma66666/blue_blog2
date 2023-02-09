@@ -22,7 +22,11 @@
 
     <delete id="deleteComment"></delete>
     <select id="queryComment"  resultType="com.blog.entity.Vo.CommentVo">
-        select c.id,c.parent_id,c.blog_id,c.accountId,c.content,c.user_type,c.reply_user_id,c.reply_user_name,c.create_time,u.header_url
+        select c.id,c.parent_id,c.blog_id,c.accountId,c.content,c.user_type,c.reply_user_id,c.reply_user_name,c.create_time,u.header_url,u.username
         from comment c left join user u on c.accountId = u.accountId where c.blog_id = #{blogId} and c.parent_id = #{parentId} order by c.create_time asc;
+    </select>
+
+    <select id="queryCommentCount" resultType="java.lang.Integer">
+          select count(*) from comment where blog_id = #{blogId}
     </select>
 </mapper>

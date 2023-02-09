@@ -15,4 +15,6 @@ public interface CommentMapper {
 
     List<CommentVo> queryComment(@Param("blogId") int bolgId, @Param("parentId") int parentId);//查评论
 
+    int queryCommentCount(int blogId);
+
 }

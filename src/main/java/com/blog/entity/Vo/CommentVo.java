@@ -38,6 +38,9 @@ public class CommentVo {
 
     @ApiModelProperty(value = "用户头像")
     private String headerUrl;
+    
+    @ApiModelProperty(value = "用户昵称")
+    private String username;
 
     private  List<CommentVo> commentVoList ;
 

@@ -33,5 +33,10 @@ public class CommentServiceImpl implements CommentService {
         return commentVoList;
     }
 
+    @Override
+    public int queryCommentCount(int blogId) {
+        return commentMapper.queryCommentCount(blogId);
+    }
+
 
 }

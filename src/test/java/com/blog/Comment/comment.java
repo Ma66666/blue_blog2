@@ -2,10 +2,14 @@ package com.blog.Comment;
 
 import com.blog.BlueBlogApplication;
 import com.blog.entity.Comment;
+import com.blog.entity.Vo.BlogVo;
+import com.blog.entity.Vo.BlogVoo;
 import com.blog.entity.Vo.CommentVo;
+import com.blog.service.BlogService;
 import com.blog.service.CommentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,6 +25,9 @@ public class comment {
 
     @Resource
     private CommentService commentService;
+
+    @Resource
+    private BlogService blogService;
     @Test
     public void insertComment(){
         Comment comment = new Comment();
@@ -46,5 +53,17 @@ public class comment {
             }
         }
        System.out.println(commentVoList.get(1));
+    }
+    @Test
+    public void test(){
+      BlogVo blogVo =  blogService.QueryBlog(1);
+      BlogVoo blogVoo = new BlogVoo();
+        BeanUtils.copyProperties(blogVo,blogVoo);
+        System.out.println(blogVoo.toString());
+    }
+
+    @Test
+    public void queryCommentCount(){
+        System.out.println(commentService.queryCommentCount(1));
     }
 }

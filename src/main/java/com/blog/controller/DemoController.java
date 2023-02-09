@@ -15,6 +15,7 @@ import com.blog.util.SendSms;
 import com.qiniu.util.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -121,6 +122,14 @@ public class DemoController {
         return Result.ok("删除成功");
     }
 
+    @GetMapping( "GetBlogAndComment")
+    public Result GetBlogAndComment(@RequestParam(value = "blogId") int blogId,
+                                    @RequestParam(value = "haha") String haha){
+        Map<String,Object> map = new HashMap<>();
+        map.put("blog",blogService.QueryBlog(blogId));
+        map.put("comment",commentService.queryComment(blogId,0));
+        return Result.ok(map);
+    }
     @PostMapping("/saveBlog")
     public Result SaveBlog(@RequestParam(value = "title")String title,
                            @RequestParam(value = "content")String content,
@@ -143,12 +152,18 @@ public class DemoController {
         return Result.ok();
     }
 
-    @GetMapping(value = "GetBlogAndComment")
-    public Result GetBlogAndComment(int blogId){
-        Map<String,Object> map = new HashMap<>();
-        map.put("博客内容",blogService.QueryBlog(blogId));
-        map.put("评论区",commentService.queryComment(blogId,0));
-return Result.ok(map);
+
+
+    @GetMapping(value = "GetBlogList")
+    public Result GetBlogList(){
+
+        return Result.ok(blogService.QueryBlogList());
     }
+    @GetMapping(value = "GetCommentCount")
+    public Result GetCommentCountt(){
+
+        return Result.ok(blogService.QueryBlogList());
+    }
+
 
 }
