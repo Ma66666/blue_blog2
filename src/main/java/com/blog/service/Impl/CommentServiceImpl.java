@@ -2,11 +2,15 @@ package com.blog.service.Impl;
 
 import com.blog.dao.CommentMapper;
 import com.blog.entity.Comment;
+import com.blog.entity.Dto.CommentDto;
 import com.blog.entity.Vo.CommentVo;
 import com.blog.service.CommentService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,8 +20,12 @@ public class CommentServiceImpl implements CommentService {
     private CommentMapper commentMapper;
 
     @Override
-    public int insertComment(Comment comment) {
-
+    public int insertComment(CommentDto commentDto,String accountId) {
+        Comment comment = new Comment();
+        BeanUtils.copyProperties(commentDto,comment);
+        comment.setAccountId(accountId);
+        comment.setCreateTime(new Date());
+        comment.setUserType(0);
         return commentMapper.insertComment(comment);
     }
 

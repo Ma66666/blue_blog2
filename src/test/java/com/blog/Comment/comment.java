@@ -30,16 +30,16 @@ public class comment {
     private BlogService blogService;
     @Test
     public void insertComment(){
-        Comment comment = new Comment();
-        comment.setParentId(5);
-        comment.setBlogId(1);
-        comment.setAccountId("7b5hiIEQ");
-        comment.setContent("哈喽你也好");
-        comment.setUserType(0);
-        comment.setCreateTime(new Date());
-        comment.setReplyUserId("nNEjUJzW");
-        comment.setReplyUserName("8848");
-        commentService.insertComment(comment);
+//        Comment comment = new Comment();
+//        comment.setParentId(5);
+//        comment.setBlogId(1);
+//        comment.setAccountId("7b5hiIEQ");
+//        comment.setContent("哈喽你也好");
+//        comment.setUserType(0);
+//        comment.setCreateTime(new Date());
+//        comment.setReplyUserId("nNEjUJzW");
+//        comment.setReplyUserName("8848");
+//        commentService.insertComment(comment);
     }
     @Test
     public void queryComment(){

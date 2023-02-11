@@ -3,12 +3,15 @@ package com.blog.controller;
 import com.blog.config.QiNiuYunConfig;
 import com.blog.dao.UserMapper;
 import com.blog.entity.Blog;
+import com.blog.entity.Comment;
 import com.blog.entity.Dto.BlogDto;
+import com.blog.entity.Dto.CommentDto;
 import com.blog.entity.User;
 import com.blog.service.BlogService;
 import com.blog.service.CommentService;
 import com.blog.util.BlogToken;
 import com.blog.util.ExceptionHandler.BlogException;
+import com.blog.util.GetTokenAccountId;
 import com.blog.util.result.Result;
 import com.blog.service.UserService;
 import com.blog.util.SendSms;
@@ -16,6 +19,7 @@ import com.qiniu.util.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +55,9 @@ public class DemoController {
     private String bucket;
     @Autowired
     private BlogService blogService;
+
+    @Resource
+    private GetTokenAccountId getTokenAccountId;
 
     @Resource
     private CommentService commentService;
@@ -123,8 +130,8 @@ public class DemoController {
     }
 
     @GetMapping( "GetBlogAndComment")
-    public Result GetBlogAndComment(@RequestParam(value = "blogId") int blogId,
-                                    @RequestParam(value = "haha") String haha){
+    public Result GetBlogAndComment(@RequestParam(value = "blogId") int blogId
+                                    ){
         Map<String,Object> map = new HashMap<>();
         map.put("blog",blogService.QueryBlog(blogId));
         map.put("comment",commentService.queryComment(blogId,0));
@@ -156,13 +163,21 @@ public class DemoController {
 
     @GetMapping(value = "GetBlogList")
     public Result GetBlogList(){
-
         return Result.ok(blogService.QueryBlogList());
     }
-    @GetMapping(value = "GetCommentCount")
-    public Result GetCommentCountt(){
 
-        return Result.ok(blogService.QueryBlogList());
+    @GetMapping(value = "GetCommentCount")
+    public Result GetCommentCountt(@RequestParam(value = "blogId") int blogId){
+        return Result.ok(commentService.queryCommentCount(blogId));
+    }
+
+    @PostMapping(value="sendComment")
+    public Result sendComment(@RequestBody CommentDto commentDto,HttpServletRequest httpServletRequest){
+        //此处要抛异常，以后补充
+
+     String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+      commentService.insertComment(commentDto,AccountId);
+        return  Result.ok();
     }
 
 

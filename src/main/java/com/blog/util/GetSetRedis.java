@@ -18,6 +18,7 @@ public class GetSetRedis {
     private static final String PREFIX_PHONE = "phone";
     private static final String PREFIX_TOKEN = "token";
     private static final String PREFIX_REGISTER = "register";
+    private static final String PREFIX_ENTITY_LIKE="like:entity";
 
     public static String getPrefixPhone(String phone) {
         return PREFIX_PHONE + SPLIT + phone;
@@ -31,6 +32,16 @@ public class GetSetRedis {
 
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+
+    /**\
+     *
+     * @param entityType //某个实体
+     * @param entityId //点赞ID
+     * @return
+     */
+    public static String getEntityLikeKey(int entityType,int entityId){
+           return PREFIX_ENTITY_LIKE + SPLIT +entityType + SPLIT + entityId;
+    }
 
 //    //判断是否存在key
 //    public boolean hasKey(String key) {
