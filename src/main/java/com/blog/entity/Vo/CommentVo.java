@@ -42,6 +42,12 @@ public class CommentVo {
     @ApiModelProperty(value = "用户昵称")
     private String username;
 
+    @ApiModelProperty(value = "点赞总数")
+    private int likeCount;
+
+    @ApiModelProperty(value = "用户点赞状态 0：未点赞,1已点赞")
+    private int likeType;
+
     private  List<CommentVo> commentVoList ;
 
     public CommentVo() {

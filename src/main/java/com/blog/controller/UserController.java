@@ -31,6 +31,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "获取个人用户信息")
     @GetMapping("getUserInfo")
     public Result getUserInfo(HttpServletRequest request){
         String token = request.getHeader("Authorization");
@@ -56,4 +57,8 @@ public class UserController {
             return Result.ok("更换成功");
         }        return Result.fail("更换失败");
     }
+
+
+
+
 }

@@ -24,4 +24,6 @@ public interface UserService {
     Map<String,Object> updateUserInfo(String token,UserVo userVo);  //修改用户信息
 
     boolean updateHeaderUrl(MultipartFile headerImage, String accountId) throws IOException;//修改用户头像
+
+    UserVo queryUserInfo(String accountId);
 }

@@ -1,9 +1,7 @@
 package com.blog.Comment;
 
 import com.blog.BlueBlogApplication;
-import com.blog.entity.Comment;
 import com.blog.entity.Vo.BlogVo;
-import com.blog.entity.Vo.BlogVoo;
 import com.blog.entity.Vo.CommentVo;
 import com.blog.service.BlogService;
 import com.blog.service.CommentService;
@@ -15,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -43,11 +40,11 @@ public class comment {
     }
     @Test
     public void queryComment(){
-        List<CommentVo> commentVoList = commentService.queryComment(1,0);
+        List<CommentVo> commentVoList = commentService.queryComment(1,0,"");
 //        System.out.println(commentVoList.get(0));
 
         for(CommentVo commentVo : commentVoList){
-            List<CommentVo> commentVoList2= commentService.queryComment(1,commentVo.getId());
+            List<CommentVo> commentVoList2= commentService.queryComment(1,commentVo.getId(),"");
             for ( CommentVo commentVo1 : commentVoList2){
                 commentVo.addCommentVo(commentVo1);
             }
@@ -56,10 +53,8 @@ public class comment {
     }
     @Test
     public void test(){
-      BlogVo blogVo =  blogService.QueryBlog(1);
-      BlogVoo blogVoo = new BlogVoo();
-        BeanUtils.copyProperties(blogVo,blogVoo);
-        System.out.println(blogVoo.toString());
+      BlogVo blogVo =  blogService.QueryBlog(1,"");
+
     }
 
     @Test

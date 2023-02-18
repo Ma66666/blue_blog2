@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.ListMapper">
+    <sql id="selectFields">
+        blog.id,username,header_url,title,content,hot,blog.create_time,cover
+    </sql>
+    <select id="queryBlogListByHot1" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition}
+            </if>
+        </where>
+        order by hot desc
+         limit #{start},#{total}
+    </select>
+
+    <select id="queryHotCount" resultType="java.lang.Integer">
+         select count(*) from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBlogListByHot" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition}
+            </if>
+        </where>
+        order by hot desc
+    </select>
+
+
+    <select id="queryBlogListByMonthAndHot" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            DATE_FORMAT(blog.create_time,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m')
+        </where>
+        order by hot desc
+    </select>
+    <select id="queryMonthCount" resultType="java.lang.Integer">
+        select count(*) from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            DATE_FORMAT(blog.create_time,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m')
+        </where>
+    </select>
+    <select id="queryBlogListByMonthAndHot1" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            DATE_FORMAT(blog.create_time,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m')
+        </where>
+        order by hot desc limit #{start},#{total}
+    </select>
+
+    <select id="queryBlogListByWeekAndHot" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            YEARWEEK(DATE_FORMAT(blog.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+        </where>
+        order by hot desc
+    </select>
+    <select id="queryWeekCount" resultType="java.lang.Integer">
+        select count(*) from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            YEARWEEK(DATE_FORMAT(blog.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+        </where>
+    </select>
+    <select id="queryBlogListByWeekAndHot1" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            YEARWEEK(DATE_FORMAT(blog.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+        </where>
+        order by hot desc limit #{start},#{total}
+    </select>
+
+    <select id="queryBlogListByDayAndHot" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            TO_DAYS(blog.create_time) = TO_DAYS(NOW())
+        </where>
+        order by hot desc
+    </select>
+    <select id="queryDayCount" resultType="java.lang.Integer">
+        select count(*) from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            TO_DAYS(blog.create_time) = TO_DAYS(NOW())
+        </where>
+    </select>
+    <select id="queryBlogListByDayAndHot1" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        <where>
+            <if test="condition!=null and condition !=''">
+                topic =#{condition} and
+            </if>
+            TO_DAYS(blog.create_time) = TO_DAYS(NOW())
+        </where>
+        order by hot desc limit #{start},#{total}
+    </select>
+
+
+
+</mapper>

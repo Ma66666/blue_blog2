@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.blog.dao.UserMapper;
 import com.blog.entity.User;
 import com.blog.entity.Vo.UserVo;
+import com.blog.service.LikeService;
 import com.blog.util.GetSetRedis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,9 @@ public class redistest {
     private GetSetRedis getSetRedis;
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    private LikeService likeService;
+
     @Test
     public void test(){
         User user = userMapper.selectByphone("17336122191");
@@ -49,5 +53,15 @@ public class redistest {
           UserVo userVo = JSON.parseObject(getSetRedis.getToken("eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOiJPak5pUHFkZSJ9.se2JaXyOsjqnNYaa7C6w6IU9ZazE5FleY_vcmwu2cX8"),UserVo.class);
           System.out.println(userVo.getUsername());
         System.out.println();
+    }
+
+    @Test
+    public void setUserLike(){
+      likeService.follow("OjNiPqde","YSKM2287");
+    }
+
+    @Test
+    public void deleteUserLike(){
+        likeService.unfollow("OjNiPqde","YSKM2287");
     }
 }

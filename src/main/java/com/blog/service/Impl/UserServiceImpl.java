@@ -12,6 +12,7 @@ import com.blog.util.CommunityUtil;
 import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.GetSetRedis;
 import com.blog.util.SendSms;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -149,6 +150,14 @@ public class UserServiceImpl implements UserService {
            return true;
        }
         return false;
+    }
+
+    @Override
+    public UserVo queryUserInfo(String accountId) {
+        User user = userMapper.selectByAccountId(accountId,"");
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user,userVo);
+        return userVo;
     }
 
 

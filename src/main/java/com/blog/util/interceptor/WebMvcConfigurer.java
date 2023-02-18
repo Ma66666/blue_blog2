@@ -17,6 +17,9 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 .addPathPatterns("/**")
                 .excludePathPatterns(swaggerExcludes)//不拦截swagger
                 .excludePathPatterns("/api/demo/**")
+                .excludePathPatterns("/api/blogShow/**")
+                .excludePathPatterns("/api/Topic/**")
+                .excludePathPatterns("/api/login/**")
         ;                    // 拦截所有请求，通过判断是否有 @LoginRequired 注解 决定是否需要登录
         super.addInterceptors(registry);
     }

@@ -17,4 +17,8 @@ public interface CommentMapper {
 
     int queryCommentCount(int blogId);
 
+    int updataLike(int id); //like字段加1
+
+    int cutLike(int id);
+
 }

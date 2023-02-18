@@ -1,6 +1,6 @@
 package com.blog.entity.Vo;
 
-import com.blog.entity.Blog;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +11,11 @@ import java.util.List;
 
 @Data
 public class BlogVo {
+
+
+    @ApiModelProperty(value = "博客ID")
+    private int id;
+
 
     @ApiModelProperty(value = "账户编号ID")
     private String accountId;
@@ -35,6 +40,21 @@ public class BlogVo {
 
     @ApiModelProperty(value = "封面")
     private String cover;
+
+    @ApiModelProperty(value = "话题")
+    private String topic;
+
+    @ApiModelProperty(value = "点赞总数")
+    private int likeCount;
+
+    @ApiModelProperty(value = "用户点赞状态 0：未点赞,1已点赞")
+    private int likeType;
+
+    @ApiModelProperty(value = "收藏总数")
+    private int collectCount;
+
+    @ApiModelProperty(value = "用户收藏状态 0：未点赞,1已点赞")
+    private int collectType;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ApiModelProperty(value = "图片1")

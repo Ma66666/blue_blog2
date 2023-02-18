@@ -9,6 +9,7 @@ import com.blog.entity.Dto.CommentDto;
 import com.blog.entity.User;
 import com.blog.service.BlogService;
 import com.blog.service.CommentService;
+import com.blog.service.LikeService;
 import com.blog.util.BlogToken;
 import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.GetTokenAccountId;
@@ -31,8 +32,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.blog.util.result.ResultCodeEnum.DATA_ERROR;
-import static com.blog.util.result.ResultCodeEnum.Header_Url_ERROR;
+import static com.blog.util.result.ResultCodeEnum.*;
 
 @Api(tags="demo")
 @RestController
@@ -61,123 +61,49 @@ public class DemoController {
 
     @Resource
     private CommentService commentService;
+
+    @Resource
+    private LikeService likeService;
     
 
 
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping("/Send")
-    public Boolean sendCode(@RequestParam(value = "phone",required = true) String phone) {
-        return sendSms.send(phone," ","1234","1");
+
+
+
+    //点赞博客
+    @PostMapping(value="blogLike")
+    public Result blogLike(@RequestParam(value = "blogId") int blog,HttpServletRequest httpServletRequest){
+        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+        likeService.Bloglike(blog,AccountId);
+       return Result.ok("ok");
     }
-    @ApiOperation(value = "更换头像")
-    @PostMapping("/upload")
-    public Result uploadHeader(@RequestParam("file") MultipartFile headerImage, HttpServletRequest request) throws IOException {
-        if (headerImage == null) {
-            throw new BlogException(DATA_ERROR);
+    //收藏博客
+    @PostMapping(value = "blogCollect")
+    public Result blogCollect(@RequestParam(value = "blogId") int blog,HttpServletRequest httpServletRequest){
+        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+        likeService.BlogCollect(blog,AccountId);
+        return Result.ok("ok");
+    }
+
+    //点赞评论
+    @PostMapping(value="CommentLike")
+    public Result CommentLike(@RequestParam(value = "commentId") int id,HttpServletRequest httpServletRequest){
+        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+        likeService.CommentLike(id,AccountId);
+        return Result.ok("ok");
+    }
+
+    @GetMapping(value = "getUserLikeType")
+    public Result getUserLikeType(@RequestParam(value = "BeLikeAccountId") String BeLikeAccountId,
+                                  HttpServletRequest httpServletRequest ){
+        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+        if (AccountId.equals(BeLikeAccountId)){
+            return Result.ok(3);
         }
-        String token = request.getHeader("Authorization");
-        Map<String,Object> map = BlogToken.parserJavaWebToken(token);
-        String accountId = (String) map.get("accountId");
-        if (userService.updateHeaderUrl(headerImage,accountId)){
-            return Result.ok("更换成功");
-        }        return Result.fail("更换失败");
-    }
-
-//    @ApiOperation(value = "更换头象正确")
-//    @PostMapping(value = "uploadImg")
-//    public Result uploadImg(@RequestBody HeaderUrlDto headerUrlDto) throws IOException{
-//        if (headerUrlDto.getFileName()==null||headerUrlDto.getInputStream1()==null){
-//            throw new BlogException(Header_Url_ERROR);
-//        }
-//        String link = qiNiuYunConfig.uploadImgToQiNiu1(headerUrlDto.getInputStream1(),headerUrlDto.getFileName());
-//        if (link.equals("false")){
-//            return Result.fail("更换失败，请使用jpg或png格式");
-//        }
-//        userService.updateHeaderUrl(headerUrlDto.getAccountId());
-
-//        if (userVo.getHeaderUrl().equals(user.getHeaderUrl())){
-//            System.out.println("我错啦");
-//            throw new BlogException(Header_Url_ERROR);
-//        }
-//        FileInputStream inputStream = (FileInputStream) headerImage.getInputStream();
-//        //为文件重命名：uuid+filename
-//        filename = UUID.randomUUID() + filename;
-////        String link = qiNiuYunConfig.uploadImgToQiNiu(inputStream, filename);
-
-//        return Result.ok("更换成功");
-
-   // }
-   @ApiOperation(value = "获取七牛云token")
-    @GetMapping(value = "policy")
-    public Result Policy(){
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dir = sdf.format(new Date());
-        Auth auth = Auth.create(accessKey, secretKey);
-        String upToken = auth.uploadToken(bucket);
-
-        Map<String, String> respMap = new HashMap<>();
-        respMap.put("token",upToken);
-        return Result.ok(respMap);
-    }
-
-    @PostMapping ("/delectImg")
-    public Result DeleteImg(@RequestParam(value = "Img")String Img){
-        qiNiuYunConfig.deleteFile1(Img);
-        return Result.ok("删除成功");
-    }
-
-    @GetMapping( "GetBlogAndComment")
-    public Result GetBlogAndComment(@RequestParam(value = "blogId") int blogId
-                                    ){
-        Map<String,Object> map = new HashMap<>();
-        map.put("blog",blogService.QueryBlog(blogId));
-        map.put("comment",commentService.queryComment(blogId,0));
-        return Result.ok(map);
-    }
-    @PostMapping("/saveBlog")
-    public Result SaveBlog(@RequestParam(value = "title")String title,
-                           @RequestParam(value = "content")String content,
-                           @RequestParam(value = "cover")String cover,
-                           @RequestParam(value = "ImgList")List<Object> ImgList,
-                           @RequestParam(value = "type") int type,
-                             HttpServletRequest httpServletRequest
-                           ){
-        String token = httpServletRequest.getHeader("Authorization");
-        Map<String,Object> map = BlogToken.parserJavaWebToken(token);
-        String accountId = (String) map.get("accountId");
-        blogService.insertBlog(title,content,cover,ImgList,type,accountId);
-//        System.out.println(title);
-//        System.out.println(content);
-//        System.out.println(cover);
-//        System.out.println(type);
-
-//       System.out.println("我是blog1"+blog.getImage1());
-
-        return Result.ok();
-    }
-
-
-
-    @GetMapping(value = "GetBlogList")
-    public Result GetBlogList(){
-        return Result.ok(blogService.QueryBlogList());
-    }
-
-    @GetMapping(value = "GetCommentCount")
-    public Result GetCommentCountt(@RequestParam(value = "blogId") int blogId){
-        return Result.ok(commentService.queryCommentCount(blogId));
-    }
-
-    @PostMapping(value="sendComment")
-    public Result sendComment(@RequestBody CommentDto commentDto,HttpServletRequest httpServletRequest){
-        //此处要抛异常，以后补充
-
-     String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
-      commentService.insertComment(commentDto,AccountId);
-        return  Result.ok();
+        return Result.ok(likeService.hasLike(AccountId,BeLikeAccountId));
     }
 
 

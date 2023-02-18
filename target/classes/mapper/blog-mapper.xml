@@ -4,27 +4,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blog.dao.BlogMapper">
     <sql id="selectFields">
-        blog.id,username,header_url,blog.accountId,title,content,hot,type,blog.create_time,update_time,topic,tag, cover, image1
+        blog.id,username,header_url,blog.accountId,title,content,hot,type,blog.like_count,collect_count,blog.create_time,update_time,topic,tag, cover, image1
 , image2, image3, image4, image5, image6, image7, image8, image9
     </sql>
 
     <sql id="insertFields">
-        accountId, title, content, hot, type, create_time, update_time, cover, image1
+        accountId, title, content, hot, type, topic,create_time, update_time, like_count,collect_count,cover, image1
 , image2, image3, image4, image5, image6, image7, image8, image9
     </sql>
 
     <insert id="insertBlog" parameterType="Blog" keyProperty="id" >
         insert into blog (<include refid="insertFields"></include>) values
-       (#{accountId},#{title},#{content},#{hot},#{type},#{createTime},#{updateTime},#{cover},#{image1},
+       (#{accountId},#{title},#{content},#{hot},#{type},#{topic},#{createTime},#{updateTime},#{likeCount},#{collectCount},#{cover},#{image1},
         #{image2},#{image3},#{image4},#{image5},#{image6},#{image8},#{image8},#{image9})
     </insert>
+    <update id="updataLike">
+        update blog set like_count = like_count + 1 where id = #{blogId};
+    </update>
+    <update id="cutLike">
+        update blog set like_count = like_count -1 where id = #{blogId};
+    </update>
+
+    <update id="updataCollectLike">
+        update blog set collect_count = collect_count + 1 where id = #{blogId};
+    </update>
+    <update id="cutCollectLike">
+        update blog set collect_count = collect_count -1 where id = #{blogId};
+    </update>
+
+    <update id="deleteBlog">
+        update blog set type = 3 where id = #{blogId};
+    </update>
+    <update id="saveCg">
+        update blog set title =#{title},type = #{type},image1 =#{image1},image2 =#{image2},image3 =#{image3},
+                        image4 =#{image4},image5 =#{image5},image6 =#{image6},image7 =#{image7},image8 =#{image8},
+                        image9 =#{image9},content =#{content},cover = #{cover} ,create_time = #{createTime} where id = #{id} ;
+    </update>
+
 
     <select id="queryById" resultType="com.blog.entity.Vo.BlogVo">
         select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId where blog.id = #{id}
     </select>
 
     <select id="queryByList" resultType="com.blog.entity.Vo.BlogListVo">
-        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId where type = 1
+    </select>
+    <select id="queryByListCg" resultType="com.blog.entity.Vo.BlogListVo">
+        select id,title,cover,content,create_time from blog  where type = 0 and accountId = #{accountId}
+    </select>
+    <select id="queryUserBlogList" resultType="com.blog.entity.Vo.BlogListVo">
+        select <include refid="selectFields"></include> from blog left join user
+            on blog.accountId = user.accountId
+        where type = 1 and blog.accountId =#{accountId}
     </select>
 
 

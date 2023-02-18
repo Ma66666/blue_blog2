@@ -2,6 +2,7 @@ package com.blog;
 
 import com.blog.dao.UserMapper;
 import com.blog.entity.Vo.UserVo;
+import com.blog.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class UserTest {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void updateUserInfo(){
         UserVo userVo = new UserVo();
@@ -27,5 +31,9 @@ public class UserTest {
         if (userMapper.updateUserInfo(userVo) == 1) {
             System.out.println("返回值" + true);
         }
+    }
+    @Test
+    public void getUserInfo(){
+        System.out.println(userService.queryUserInfo("OjNiPqde"));
     }
 }

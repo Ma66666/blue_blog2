@@ -64,6 +64,8 @@ public class LoginController {
     @ApiOperation(value = "注册")
     @PostMapping("register")
     public Result register(@RequestBody RegisterVo registervo){
+        System.out.println(registervo.getPhone());
+        System.out.println(getSetRedis.getRegister(registervo.getPhone()));
         if (registervo.getCode().equals(getSetRedis.getRegister(registervo.getPhone()))) {
             if (userService.register(registervo).containsKey("phoneMsg")){
                 return Result.fail(userService.register(registervo).get("phoneMsg"));
@@ -79,8 +81,8 @@ public class LoginController {
     @PostMapping("login")
     public Result login (@RequestBody loginVo loginuser){
            String token = null;
-//        JSONObject jsonObject = JSONObject.parse();
 
+            System.out.println(loginuser);
             if (userService.login(loginuser)){
                 Map<String,Object> m = new HashMap<String,Object>();
                 m.put("accountId", loginuser.getAccountId());

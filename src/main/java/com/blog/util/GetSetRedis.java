@@ -18,36 +18,54 @@ public class GetSetRedis {
     private static final String PREFIX_PHONE = "phone";
     private static final String PREFIX_TOKEN = "token";
     private static final String PREFIX_REGISTER = "register";
-    private static final String PREFIX_ENTITY_LIKE="like:entity";
+    private static final String PREFIX_BLOG_LIKE= "like:blog";
+    private static final String PREFIX_COMMENT_LIKE= "like:comment";
+    private static final String PREFIX_BOLG_COLLECT= "COLLECT:BLOG";
+    private static final String PREFIX_USER_Like = "like:user";
+    private static final String PREFIX_LIKE_USER = "user:like";
 
+    //手机登录验证码
     public static String getPrefixPhone(String phone) {
         return PREFIX_PHONE + SPLIT + phone;
     }
+    //手机注册验证码
     public static String getPrefixPhone1(String phone) {
         return PREFIX_PHONE + SPLIT + PREFIX_REGISTER +SPLIT +phone;
     }
+    //token信息
     public static String getPrefixToken(String token){
         return PREFIX_TOKEN +SPLIT +token;
     }
+    //用户喜欢的博客
+    public static String getBlogLikeKey(String blogId){return PREFIX_BLOG_LIKE + SPLIT + blogId ;}
+    //用户喜欢的评论
+    public static String getCommentLikeKey(String id){return PREFIX_COMMENT_LIKE + SPLIT + id ;}
+    //用户收藏的博客
+    public static String getBlogCollectKey(String blogId){return PREFIX_BOLG_COLLECT + SPLIT + blogId ;}
+
+    /**
+     *   用户的关注列表
+     * @param accountId 用户ID
+     * @return
+     */
+    public static String getUserLike(String accountId){return PREFIX_USER_Like+SPLIT+accountId ;}
+
+    /**
+     *   用户的粉丝列表
+     * @param accountId 用户ID
+     * @return
+     */
+    public static String getLikeUser(String accountId){return PREFIX_LIKE_USER+SPLIT+accountId ;}
 
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    /**\
-     *
-     * @param entityType //某个实体
-     * @param entityId //点赞ID
-     * @return
+    /**
+     * 判断redis中是否存在这个token
+     * @param token token值
+     * @return true of false
      */
-    public static String getEntityLikeKey(int entityType,int entityId){
-           return PREFIX_ENTITY_LIKE + SPLIT +entityType + SPLIT + entityId;
-    }
-
-//    //判断是否存在key
-//    public boolean hasKey(String key) {
-//        return redisTemplate.hasKey(key);
-//    }
-public boolean hashkey(String token){
+    public boolean hashkey(String token){
     if ( redisTemplate.hasKey(getPrefixToken(token))){
         return true;
     }
@@ -112,6 +130,11 @@ public boolean hashkey(String token){
 
     }
 
+    /**
+     * 存储注册验证码
+     * @param phone 手机号码
+     * @param code 验证码
+     */
     public void setRegister(String phone,String code){
         redisTemplate.opsForValue().set(getPrefixPhone1(phone),code,1,TimeUnit.DAYS);
     }

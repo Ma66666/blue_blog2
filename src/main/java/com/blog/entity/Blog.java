@@ -43,6 +43,12 @@ public class Blog {
     @ApiModelProperty(value = "封面")
     private String cover;
 
+    @ApiModelProperty(value = "点赞总数")
+    private int likeCount;
+
+    @ApiModelProperty(value = "收藏总数")
+    private int collectCount;
+
     @ApiModelProperty(value = "图片1")
     private String image1;
 
@@ -69,7 +75,6 @@ public class Blog {
 
     @ApiModelProperty(value = "图片9")
     private String image9;
-
 
 
    //遍历集合给图片赋值

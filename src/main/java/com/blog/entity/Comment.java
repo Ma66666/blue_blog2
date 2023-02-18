@@ -36,6 +36,9 @@ public class Comment {
     @ApiModelProperty(value = "被回复用户的名称")
     private String replyUserName;
 
+    @ApiModelProperty(value = "点赞总数")
+    private int likeCount;
+
 
 
 
