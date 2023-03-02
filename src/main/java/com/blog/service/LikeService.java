@@ -1,6 +1,12 @@
 package com.blog.service;
 
 
+import com.blog.entity.Vo.LikeVo;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+
 public interface LikeService {
 
     void Bloglike(int blogId,String accountId);
@@ -31,6 +37,24 @@ public interface LikeService {
      */
     int hasLike(String accountId,String BeLikeAccountId);
 
+    /**
+     * 获得用户关注列表
+     * @param request 请求
+     * @param accountId 目标用户ID
+     * @return
+     */
+
+    Map<String,Object> UserLikeList(HttpServletRequest request,String accountId);
+
+    Map<String,Integer> getCount(String accountId);
+
+    /**
+     * 获得用户粉丝列表
+     * @param request 用来获得token中的accountId
+     * @param accountId 目标用户ID
+     * @return
+     */
+    Map<String,Object> LikeUserList(HttpServletRequest request,String accountId);
 
 
 //    //点赞方法

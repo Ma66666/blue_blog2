@@ -6,6 +6,7 @@ import com.blog.util.GetTokenAccountId;
 import com.blog.util.result.Result;
 import com.blog.util.result.ResultCodeEnum;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +23,15 @@ public class LikeController {
 
     @Autowired
     private GetTokenAccountId getTokenAccountId;
-    //点赞博客
+
+    @ApiOperation("用户点赞博客")
     @PostMapping(value="blogLike")
     public Result blogLike(@RequestParam(value = "blogId") int blog,HttpServletRequest httpServletRequest){
         String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
         likeService.Bloglike(blog,AccountId);
         return Result.ok("ok");
     }
-    //收藏博客
+    @ApiOperation("用户收藏博客")
     @PostMapping(value = "blogCollect")
     public Result blogCollect(@RequestParam(value = "blogId") int blog,HttpServletRequest httpServletRequest){
         String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
@@ -37,7 +39,8 @@ public class LikeController {
         return Result.ok("ok");
     }
 
-    //点赞评论
+
+    @ApiOperation("用户点赞评论")
     @PostMapping(value="CommentLike")
     public Result CommentLike(@RequestParam(value = "commentId") int id,HttpServletRequest httpServletRequest){
         String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
@@ -45,6 +48,8 @@ public class LikeController {
         return Result.ok("ok");
     }
 
+    //关注用户
+    @ApiOperation("用户关注用户")
     @PostMapping(value = "followUser")
     public Result followUser(@RequestParam(value = "BeLikeAccountId") String BeLikeAccountId,
                              HttpServletRequest httpServletRequest ){
@@ -55,6 +60,8 @@ public class LikeController {
                likeService.follow(AccountId,BeLikeAccountId);
                return Result.ok();
     }
+    //取关用户
+    @ApiOperation("用户取关")
     @PostMapping(value = "unfollowUser")
     public Result unfollowUser(@RequestParam(value = "BeLikeAccountId") String BeLikeAccountId,
                              HttpServletRequest httpServletRequest ){
@@ -65,7 +72,8 @@ public class LikeController {
         likeService.unfollow(AccountId,BeLikeAccountId);
         return Result.ok();
     }
-  
+    //获得用户关注状态
+    @ApiOperation("获得用户关注状态")
     @GetMapping(value = "getUserLikeType")
     public Result getUserLikeType(@RequestParam(value = "BeLikeAccountId") String BeLikeAccountId,
                                   HttpServletRequest httpServletRequest ){

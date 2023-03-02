@@ -23,4 +23,9 @@ public interface ListMapper {
     int queryDayCount(PageDto pageDto);
     List<BlogListVo> queryBlogListByDayAndHot(PageDto pageDto);  //按日热度不分页
     List<BlogListVo> queryBlogListByDayAndHot1(PageDto pageDto);//按日热度分页
+
+    int queryLatestCount(PageDto pageDto);
+    List<BlogListVo> queryBlogListByLatest(PageDto pageDto);  //按日热度不分页
+    List<BlogListVo> queryBlogListByLatest1(PageDto pageDto);//按日热度分页
+
 }

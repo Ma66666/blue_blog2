@@ -2,8 +2,10 @@ package com.blog;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.blog.dao.LikeMapper;
 import com.blog.dao.UserMapper;
 import com.blog.entity.User;
+import com.blog.entity.Vo.LikeVo;
 import com.blog.entity.Vo.UserVo;
 import com.blog.service.LikeService;
 import com.blog.util.GetSetRedis;
@@ -14,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,6 +31,9 @@ public class redistest {
     private RedisTemplate<String,String> redisTemplate;
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private LikeMapper likeMapper;
 
     @Test
     public void test(){
@@ -63,5 +70,44 @@ public class redistest {
     @Test
     public void deleteUserLike(){
         likeService.unfollow("OjNiPqde","YSKM2287");
+    }
+
+    @Test
+    public void getFollowList(){
+        String meaccountId = "Hot12345";
+        List<LikeVo> list  = new ArrayList<>();
+        String user = GetSetRedis.getUserLike("OjNiPqde");
+        Set<String> set =redisTemplate.opsForSet().members(user);
+        Iterator<String> iterator  = set.iterator();
+        if (meaccountId == "OjNiPqde"){
+            while (iterator.hasNext()){
+                LikeVo likeVo = likeMapper.getUserLikeVo(iterator.next());
+                likeVo.setLiketype(1);
+                list.add(likeVo);
+            }
+        }else {
+            //求交集
+            String user1 = GetSetRedis.getUserLike(meaccountId);
+            Set<String> set1 = redisTemplate.opsForSet().intersect(user1,user);
+            Iterator<String> iterator1  = set1.iterator();
+            while (iterator1.hasNext()){
+                LikeVo likeVo = likeMapper.getUserLikeVo(iterator1.next());
+                likeVo.setLiketype(1);
+                list.add(likeVo);
+            }
+            //求差集
+            Set<String> set2 = redisTemplate.opsForSet().difference(user,user1);
+            Iterator<String> iterator2  = set2.iterator();
+            while (iterator2.hasNext()){
+                LikeVo likeVo = likeMapper.getUserLikeVo(iterator2.next());
+                likeVo.setLiketype(0);
+                list.add(likeVo);
+            }
+        }
+        Map<String,Object> map =new HashMap<>();
+        map.put("total",set.size());
+        map.put("ListVo",list);
+        System.out.println(map);
+
     }
 }

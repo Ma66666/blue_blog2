@@ -44,20 +44,23 @@ public class BolgController {
     @Resource
     private GetTokenAccountId getTokenAccountId;
 
+    @ApiOperation(value = "获得用户草稿")
     @GetMapping("getBlogListCg")
     private Result getBlogListCg(HttpServletRequest httpServletRequest){
         String accountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
-        if (accountId == ""){
+        if (accountId == null){
             throw new BlogException(DATA_ERROR);
         }
         return Result.ok(blogService.queryByListCg(accountId));
     }
 
+    @ApiOperation(value = "用户删除博客")
     @PostMapping("deleteBlog")
     private Result deleteBlog(@RequestParam("blogId") int blogId){
         return Result.ok(blogService.deleteBlog(blogId));
     }
 
+    @ApiOperation(value = "保存博客、或发送博客")
     //保存博客
     @PostMapping("/saveCg")
     public Result SaveBlog(@RequestParam(value = "title")String title,
@@ -70,7 +73,7 @@ public class BolgController {
                            HttpServletRequest httpServletRequest
     ){
         System.out.println(title);
-        if (title == ""||content=="" ||cover =="" || ImgList.size()==0 ||topic==""){
+        if (title == null||content==null ||cover ==null || ImgList.size()==0 ||topic==null){
             throw new BlogException(DATA_ERROR);
         }
         System.out.println(id);
@@ -82,10 +85,7 @@ public class BolgController {
         return Result.ok();
     }
 
-    @GetMapping ("/getUserBlogList")
-    public Result getUserBlogList(@RequestParam(value = "accountId")String accountId){
-        return Result.ok(blogService.QueryUserBlogList(accountId));
-    }
+
 
     @ApiOperation(value = "保存或发送博客")
     @PostMapping("/saveBlog")
@@ -98,7 +98,7 @@ public class BolgController {
                            HttpServletRequest httpServletRequest
     ){
         System.out.println(title);
-        if (title == ""||content=="" ||cover =="" || ImgList.size()==0 ||topic==""){
+        if (title == null||content==null ||cover ==null || ImgList.size()==0 ||topic==null){
             throw new BlogException(DATA_ERROR);
         }
         String token = httpServletRequest.getHeader("Authorization");
@@ -133,6 +133,9 @@ public class BolgController {
     @ApiOperation(value = "博客页面输图片功能")
     @PostMapping ("/delectImg")
     public Result DeleteImg(@RequestParam(value = "Img")String Img){
+        if (Img == null){
+            throw new BlogException(DATA_ERROR);
+        }
         qiNiuYunConfig.deleteFile1(Img);
         return Result.ok("删除成功");
     }

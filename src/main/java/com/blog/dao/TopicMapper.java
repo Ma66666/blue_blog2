@@ -7,6 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface TopicMapper {
-    List<Topic> getTopicList() ;
+    List<Topic> getTopicList() ; //获得话题集合
 
 }

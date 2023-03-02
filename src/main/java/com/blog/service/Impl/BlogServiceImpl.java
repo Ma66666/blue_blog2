@@ -25,7 +25,17 @@ public class BlogServiceImpl implements BlogService {
     private RedisTemplate<String,String> redisTemplate;
 
 
-
+    /**
+     *
+     * @param title 博客标题
+     * @param content 博客内容
+     * @param cover 博客封面
+     * @param ImgList 博客图片礼盒
+     * @param type 博客状态
+     * @param accountId 博主ID
+     * @param topic 博客话题
+     * @return 1代表发送成功
+     */
     @Override
     public int insertBlog(String title, String content, String cover, List<Object> ImgList, int type, String accountId,String topic) {
         Blog blog = new Blog();
@@ -43,9 +53,16 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.insertBlog(blog);
     }
 
+    /**
+     *  查询博客详细，并判断该用户是否点赞收藏
+     * @param blogId 博客ID
+     * @param accountId 用户ID
+     * @return 返回博客实体
+     */
     @Override
     public BlogVo QueryBlog(int blogId,String accountId) {
         BlogVo blogVo = blogMapper.queryById(blogId);
+        //查看用户是否
         String entityLikeKey = GetSetRedis.getBlogLikeKey(""+blogId);
         String entityLikeKey1 =GetSetRedis.getBlogCollectKey(""+blogId);
         if (accountId=="空的"){
@@ -81,27 +98,55 @@ public class BlogServiceImpl implements BlogService {
         return blogVo;
     }
 
+    //查询博客集合
     @Override
     public List<BlogListVo> QueryBlogList() {
 
         return blogMapper.queryByList();
     }
 
+    /**
+     * 查询用户博客集合
+     * @param accountId 博主ID
+     * @return 用户博客集合
+     */
     @Override
     public List<BlogListVo> QueryUserBlogList(String accountId) {
         return blogMapper.queryUserBlogList(accountId);
     }
 
+    /**
+     * 查询 用户保存的草稿
+     * @param accountId 用户ID
+     * @return 返回草稿集合
+     */
     @Override
     public List<BlogListVo> queryByListCg(String accountId) {
         return blogMapper.queryByListCg(accountId);
     }
 
+    /**
+     * 删除博客ID
+     * @param blogId 博客ID
+     * @return
+     */
     @Override
     public int deleteBlog(int blogId) {
         return blogMapper.deleteBlog(blogId);
     }
 
+    /**
+     * 保存博客或者发送博客，主要用type判断
+     * @param title
+     * @param content
+     * @param cover
+     * @param ImgList
+     * @param type
+     * @param accountId
+     * @param topic
+     * @param id
+     * @return
+     */
     @Override
     public int saveCg(String title, String content, String cover, List<Object> ImgList, int type, String accountId, String topic, int id) {
         Blog blog = new Blog();

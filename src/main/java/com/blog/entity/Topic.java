@@ -3,6 +3,7 @@ package com.blog.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+//话题实体
 @Data
 public class Topic {
     @ApiModelProperty(value = "ID主键")

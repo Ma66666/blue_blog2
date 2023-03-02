@@ -15,10 +15,10 @@ public interface CommentMapper {
 
     List<CommentVo> queryComment(@Param("blogId") int bolgId, @Param("parentId") int parentId);//查评论
 
-    int queryCommentCount(int blogId);
+    int queryCommentCount(int blogId); //查评论数
 
     int updataLike(int id); //like字段加1
 
-    int cutLike(int id);
+    int cutLike(int id); //取消关注
 
 }

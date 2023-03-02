@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface SortMapper {
-    List<Sort> getSortList();
+    List<Sort> getSortList(); //获得排序方式集合
 }

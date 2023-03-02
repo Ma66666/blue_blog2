@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 
+
+//七牛云配置
 @Data
 @Component
-
 public class QiNiuYunConfig {
 
     @Value("${qiniu.key.access}")
