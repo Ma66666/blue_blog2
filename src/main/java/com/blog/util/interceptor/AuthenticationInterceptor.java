@@ -44,7 +44,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return true;
             } else {
                 // token不合法或者过期
-                response.getWriter().write("{code:400,msg:'token不合法或者过期'}");
+                response.getWriter().write("Notoken");
                 log.info("拦截");
                 return false;
             }

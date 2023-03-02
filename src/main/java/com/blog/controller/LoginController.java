@@ -5,11 +5,13 @@ import com.blog.dao.UserMapper;
 import com.blog.entity.Vo.UserVo;
 import com.blog.entity.Vo.loginVo;
 import com.blog.entity.Vo.RegisterVo;
+import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.result.Result;
 import com.blog.util.BlogToken;
 import com.blog.service.UserService;
 import com.blog.util.GetSetRedis;
 import com.blog.util.RandomFour;
+import com.blog.util.result.ResultCodeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,7 @@ import java.util.Map;
 @RequestMapping("api/login")
 @CrossOrigin
 public class LoginController {
-    @Autowired
-    private UserMapper userMapper;
+
 
     @Autowired
     private GetSetRedis getSetRedis;
@@ -47,6 +48,9 @@ public class LoginController {
     @GetMapping("sendSMS")
     @ApiOperation(value = "登录验证码")
     public Result send(@RequestParam("phone") String phone){
+        if (phone==null){
+            throw new BlogException(ResultCodeEnum.DATA_ERROR);
+        }
         System.out.println(phone);
         String x = randomFour.getFour();
         getSetRedis.setValue(phone,x);
@@ -55,6 +59,9 @@ public class LoginController {
     @GetMapping("sendSMS2")
     @ApiOperation(value = "注册验证码")
     public Result send2(@RequestParam("phone") String phone){
+        if (phone==null){
+            throw new BlogException(ResultCodeEnum.DATA_ERROR);
+        }
         System.out.println(phone);
         String x = randomFour.getFour();
         getSetRedis.setRegister(phone,x);
@@ -64,6 +71,9 @@ public class LoginController {
     @ApiOperation(value = "注册")
     @PostMapping("register")
     public Result register(@RequestBody RegisterVo registervo){
+        if (registervo == null){
+            throw new BlogException(ResultCodeEnum.DATA_ERROR);
+        }
         System.out.println(registervo.getPhone());
         System.out.println(getSetRedis.getRegister(registervo.getPhone()));
         if (registervo.getCode().equals(getSetRedis.getRegister(registervo.getPhone()))) {
@@ -77,26 +87,13 @@ public class LoginController {
         }
     }
 
-
+    @ApiOperation("登录")
     @PostMapping("login")
     public Result login (@RequestBody loginVo loginuser){
-           String token = null;
-
-            System.out.println(loginuser);
-            if (userService.login(loginuser)){
-                Map<String,Object> m = new HashMap<String,Object>();
-                m.put("accountId", loginuser.getAccountId());
-                token = BlogToken.createJavaWebToken(m);
-                userService.settoken(token,loginuser);
-                System.out.println("登录成功");
-                Map<String,Object>map = new HashMap<>();
-                UserVo userVo = JSON.parseObject(getSetRedis.getToken(token),UserVo.class);
-                map.put("token",token);
-                map.put("UserVo",userVo);
-                return Result.ok(map);
-            }
-        System.out.println("登录失败");
-        return Result.fail("登录失败");
+        if (loginuser == null){
+            throw new BlogException(ResultCodeEnum.DATA_ERROR);
+        }
+        return Result.ok(userService.login(loginuser));
     }
 
 }

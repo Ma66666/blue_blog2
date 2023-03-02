@@ -2,50 +2,76 @@ package com.blog.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
 import java.util.List;
 
+
+
+//博客实体
+@Document(indexName = "blog",type = "_blog",shards = 6,replicas = 3)
 @Data
 public class Blog {
 
 
+    @Id
     @ApiModelProperty(value = "博客ID")
     private int id;
 
+    @Field(type = FieldType.Text)
     @ApiModelProperty(value = "账户编号ID")
     private String accountId;
 
+
+    //分词器解析器
+    //分析一串字符串由多少词语组成 analyzer searchAnalyzer
+    @Field(type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_smart")
     @ApiModelProperty(value = "博客标题")
     private String title;
 
+    //分词器解析器
+    //分析一串字符串由多少词语组成 analyzer searchAnalyzer
+    @Field(type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_smart")
     @ApiModelProperty(value = "博客内容")
     private String content;
 
+    @Field(type = FieldType.Integer)
     @ApiModelProperty(value = "博客热度")
     private int hot;
 
+    @Field(type = FieldType.Integer)
     @ApiModelProperty(value = "博客状态 0：草稿 1：正常 2：置顶 3删除")
     private int type;
 
+    @Field(type = FieldType.Date)
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
+    @Field(type = FieldType.Date)
     @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
+    @Field(type = FieldType.Text)
     @ApiModelProperty(value = "话题")
     private String topic;
 
+    @Field(type = FieldType.Text)
     @ApiModelProperty(value = "标签")
     private String tag;
 
+    @Field(type = FieldType.Text)
     @ApiModelProperty(value = "封面")
     private String cover;
 
+    @Field(type = FieldType.Integer)
     @ApiModelProperty(value = "点赞总数")
     private int likeCount;
 
+    @Field(type = FieldType.Integer)
     @ApiModelProperty(value = "收藏总数")
     private int collectCount;
 

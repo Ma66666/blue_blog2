@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.util.Date;
 
+//评论实体
 @Data
 public class Comment {
 

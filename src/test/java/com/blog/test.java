@@ -20,8 +20,10 @@ public class test {
 
     @Test
     public void getUser(){
-//        System.out.println(userMapper.selectByAccountId("abcdefg"));
+
     }
+
+
 
 //    @Test
 //    public void test(){

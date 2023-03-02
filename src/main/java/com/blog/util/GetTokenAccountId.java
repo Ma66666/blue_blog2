@@ -12,7 +12,7 @@ public class GetTokenAccountId {
         String token = httpServletRequest.getHeader("Authorization");
         Map<String,Object> map = BlogToken.parserJavaWebToken(token);
         if (map==null){
-            return "空的";
+            return "";
         }
         String accountId = (String) map.get("accountId");
         return accountId;

@@ -1,7 +1,6 @@
 package com.blog.dao;
 
 import com.blog.entity.Blog;
-import com.blog.entity.Dto.PageDto;
 import com.blog.entity.Vo.BlogListVo;
 import com.blog.entity.Vo.BlogVo;
 import org.apache.ibatis.annotations.Mapper;

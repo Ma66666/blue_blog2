@@ -11,13 +11,13 @@ import com.blog.util.GetSetRedis;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+
 
 import static com.blog.util.result.ResultCodeEnum.DATA_ERROR;
 
@@ -49,11 +49,8 @@ public class UserController {
         if (headerImage == null) {
             throw new BlogException(DATA_ERROR);
         }
-        //获取解析token并建accountId传递给service
-        String token = request.getHeader("Authorization");
-        Map<String,Object> map = BlogToken.parserJavaWebToken(token);
-        String accountId = (String) map.get("accountId");
-        if (userService.updateHeaderUrl(headerImage,accountId)){
+
+        if (userService.updateHeaderUrl(headerImage,request)){
             return Result.ok("更换成功");
         }        return Result.fail("更换失败");
     }

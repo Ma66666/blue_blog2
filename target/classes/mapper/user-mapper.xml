@@ -32,7 +32,7 @@
                                         accountId = #{accountId}
                                     </if>
                                     <if test="phone!=null and phone !=''">
-                                        or  phone = #{phone};
+                                     or   phone = #{phone};
                                     </if>
                                 </where>
 
@@ -40,4 +40,6 @@
     <select id="selectByphone" resultType="com.blog.entity.User">
         select <include refid="selectFields"></include> from user where phone = #{phone};
     </select>
+
+
 </mapper>

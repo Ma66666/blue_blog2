@@ -3,6 +3,7 @@ package com.blog.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+//排序实体
 @Data
 public class Sort {
     @ApiModelProperty(value = "ID主键")

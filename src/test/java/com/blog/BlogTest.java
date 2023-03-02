@@ -1,9 +1,9 @@
 package com.blog;
 
 
-import com.blog.dao.BlogMapper;
 import com.blog.dao.ListMapper;
 import com.blog.entity.Dto.PageDto;
+import com.blog.entity.Vo.BlogListVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.beans.SimpleBeanInfo;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,6 +20,8 @@ import java.util.Date;
 public class BlogTest {
     @Autowired
     private ListMapper listMapper;
+
+
     @Test
     public void queryBlogListByHot1(){
       PageDto pageDto =  new PageDto();
@@ -74,4 +74,13 @@ public class BlogTest {
         listMapper.queryBlogListByDayAndHot1(pageDto);
     }
 
+    @Test
+    public void all(){
+
+    }
+
+    @Test
+    public void all1(){
+
+    }
 }

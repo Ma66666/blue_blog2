@@ -1,5 +1,6 @@
 package com.blog.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.blog.config.QiNiuYunConfig;
 import com.blog.dao.UserMapper;
 import com.blog.entity.User;
@@ -7,17 +8,16 @@ import com.blog.entity.Vo.UserVo;
 import com.blog.entity.Vo.loginVo;
 import com.blog.entity.Vo.RegisterVo;
 import com.blog.service.UserService;
-import com.blog.util.BlogToken;
-import com.blog.util.CommunityUtil;
+import com.blog.util.*;
 import com.blog.util.ExceptionHandler.BlogException;
-import com.blog.util.GetSetRedis;
-import com.blog.util.SendSms;
+import com.blog.util.result.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.blog.util.result.ResultCodeEnum.Header_Url_ERROR;
+import static com.blog.util.result.ResultCodeEnum.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,11 +43,24 @@ public class UserServiceImpl implements UserService {
     @Value("${qiniu.bucket.header.url}")
     private String path;
 
+    @Autowired
+    private GetTokenAccountId getTokenAccountId;
+
+    /**
+     * 根据ID查询用户
+     * @param accountId 用户ID
+     * @return 返回用户实体
+     */
     @Override
     public User findUserByAccountId(String accountId) {
         return userMapper.selectByAccountId(accountId,"");
     }
 
+    /**
+     * 用户注册方法
+     * @param registervo 注册Vo
+     * @return
+     */
     @Override
     public Map<String,Object> register(RegisterVo registervo) {
         Map<String,Object> map = new HashMap<>();
@@ -73,31 +86,64 @@ public class UserServiceImpl implements UserService {
             return map;
     }
 
+    /**
+     * 用户发送短信方法
+     * @param phoneNum 电话号码
+     * @param templateCode 发送短信的模板
+     * @param code 选中code1
+     * @param code2 选中code2
+     * @return 返回短信是否发送成功
+     */
     @Override
     public boolean send(String phoneNum, String templateCode, String code,String code2) {
         return sendSms.send(phoneNum,templateCode,code,code2);
     }
 
+    /**
+     * 用户登录方法
+     * @param loginuser 用户登录Vo
+     * @return
+     */
     @Override
-    public boolean login(loginVo loginuser) {
+    public  Map<String,Object> login(loginVo loginuser) {
+        Map<String,Object> m = new HashMap<String,Object>();
         User user = userMapper.selectByAccountId(loginuser.getAccountId(),loginuser.getPhone());
+        String token = null;
         if(user==null){
-            return false;
+         throw new BlogException(LOGIN_MOBLE_ERROR);
         }
-
         String s = CommunityUtil.md5(loginuser.getPassword()+user.getSalt());
         if (user.getPassword().equals(s)||
                 loginuser.getCode().equals(getSetRedis.getValue(loginuser.getPhone()))){
-
-            return true;
+            m.put("accountId", user.getAccountId());
+            token = BlogToken.createJavaWebToken(m);
+           UserVo userVo =new UserVo();
+            userVo.setUsername(user.getUsername());
+            userVo.setAccountId(user.getAccountId());
+            userVo.setHeaderUrl(user.getHeaderUrl());
+            userVo.setCreateTime(user.getCreateTime());
+            userVo.setSex(user.getSex());
+            userVo.setStatus(user.getStatus());
+            userVo.setSignature(user.getPSignature());
+            getSetRedis.setToken(token,userVo);
+            Map<String,Object>map = new HashMap<>();
+            map.put("token",token);
+            map.put("UserVo",userVo);
+            return map;
         }
-
-        return false;
+        throw new BlogException(DATA_ERROR);
     }
 
+    /**
+     * 将token为Key，用户Vo为value存入数据库
+     * @param token 工具类返回的token，包含用户信息
+     * @param loginVo 用户Vo
+     */
     @Override
     public void settoken(String token,loginVo loginVo) {
+        System.out.println(loginVo.toString());
        User user = userMapper.selectByAccountId(loginVo.getAccountId(), loginVo.getPhone());
+       System.out.println(user);
         UserVo userVo = new UserVo();
         userVo.setUsername(user.getUsername());
         userVo.setAccountId(user.getAccountId());
@@ -109,6 +155,12 @@ public class UserServiceImpl implements UserService {
         getSetRedis.setToken(token,userVo);
     }
 
+    /**
+     * 更新用户信息
+     * @param token 用户token
+     * @param userVo 用户实体
+     * @return
+     */
     @Override
     public Map<String, Object> updateUserInfo(String token,UserVo userVo) {
         Map<String,Object> map = new HashMap<>();
@@ -125,13 +177,19 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *
+     *更换头像
      * @param headerImage 图片文件
-     * @param accountId   用户ID
+     * @param request 请求体
      * @return
      */
     @Override
-    public boolean updateHeaderUrl(MultipartFile headerImage,String accountId) throws IOException {
+    public boolean updateHeaderUrl(MultipartFile headerImage, HttpServletRequest request) throws IOException {
+        String accountId = getTokenAccountId.getTokenAccountId(request);
+        //获取解析token并建accountId传递给service
+        String token = request.getHeader("Authorization");
+        UserVo userVo = JSON.parseObject(getSetRedis.getToken(token),UserVo.class);
+        System.out.println(userVo);
+
         String filename = headerImage.getOriginalFilename();
         FileInputStream inputStream = (FileInputStream) headerImage.getInputStream();
         //为文件重命名：uuid+filename
@@ -141,7 +199,10 @@ public class UserServiceImpl implements UserService {
             throw new BlogException( Header_Url_ERROR);
         }
         String url = "http://"+path+"/"+filename;
+        userVo.setHeaderUrl(url);
+
        User user = userMapper.selectByAccountId(accountId,"");
+        getSetRedis.setToken(token,userVo);
         //七牛云删除只要图片名称，所以把域名去掉
         String deleteurl = user.getHeaderUrl().replace("http://qn.yxwhzj6.top/","");
         qiNiuYunConfig.deleteFile(deleteurl);
@@ -152,6 +213,11 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * 查询用户信息
+     * @param accountId 用户ID
+     * @return 用户Vo
+     */
     @Override
     public UserVo queryUserInfo(String accountId) {
         User user = userMapper.selectByAccountId(accountId,"");
