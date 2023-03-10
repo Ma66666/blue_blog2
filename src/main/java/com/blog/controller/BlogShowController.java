@@ -136,4 +136,18 @@ public class BlogShowController {
     public Result getUrlList(){
         return Result.ok(urlService.QueryUrl());
     }
+
+
+    @ApiOperation("获得搜索页列表")
+    @GetMapping("/getSearchUrlList")
+    public Result getSearchUrlList(){
+        return Result.ok(urlService.querySearchList());
+    }
+
+    @ApiOperation("获得消息页列表")
+    @GetMapping("/getMessageUrlList")
+    public Result getMessageUrlList(){
+        return Result.ok(urlService.queryMessageList());
+    }
+
 }

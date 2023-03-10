@@ -16,4 +16,14 @@ public class UrlServiceMapper implements UrlService {
     public List<Url> QueryUrl() {
         return urlMapper.getUrl();
     }
+
+    @Override
+    public List<Url> querySearchList() {
+        return urlMapper.getSearchUrl();
+    }
+
+    @Override
+    public List<Url> queryMessageList() {
+        return urlMapper.getMessageUrl();
+    }
 }

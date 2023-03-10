@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface UrlService {
     List<Url> QueryUrl();
+
+    List<Url> querySearchList();
+
+    List<Url> queryMessageList();
 }

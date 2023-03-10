@@ -8,7 +8,7 @@ import java.util.Map;
 @Component
 public class GetTokenAccountId {
 
-    public String getTokenAccountId(HttpServletRequest httpServletRequest){
+    public  String getTokenAccountId(HttpServletRequest httpServletRequest){
         String token = httpServletRequest.getHeader("Authorization");
         Map<String,Object> map = BlogToken.parserJavaWebToken(token);
         if (map==null){

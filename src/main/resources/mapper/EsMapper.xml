@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.es.EsMapper">
+
+    <sql id="selectFields">
+        blog.id,username,header_url,blog.accountId,title,content,hot,type,blog.like_count,collect_count,blog.create_time,update_time,topic,tag, cover, image1
+, image2, image3, image4, image5, image6, image7, image8, image9
+    </sql>
+
+    <select id="queryBlog" resultType="com.blog.dao.es.EsVo">
+
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId where type !=0  and type !=3
+
+    </select>
+
+    <select id="queryById" resultType="com.blog.entity.Vo.BlogVo">
+        select <include refid="selectFields"></include> from blog left join user on blog.accountId = user.accountId where blog.id = #{id} type !=0  and type !=3
+    </select>
+
+    <select id="queryEsBlogListByMyLikeBlog" resultType="com.blog.dao.es.EsVo" parameterType="java.util.List">
+        select <include refid="selectFields"></include>
+         from blog left join user on blog.accountId = user.accountId
+        where type !=0  and type !=3 and blog.id in
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+    </select>
+</mapper>

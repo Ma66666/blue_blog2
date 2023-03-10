@@ -21,8 +21,8 @@ public class GetSetRedis {
     private static final String PREFIX_BLOG_LIKE= "like:blog";
     private static final String PREFIX_COMMENT_LIKE= "like:comment";
     private static final String PREFIX_BOLG_COLLECT= "COLLECT:BLOG";
-    private static final String PREFIX_USER_Like = "like:user";
-    private static final String PREFIX_LIKE_USER = "user:like";
+    private static final String PREFIX_USER_Like = "user:like";
+    private static final String PREFIX_LIKE_USER = "like:user";
 
     //手机登录验证码
     public static String getPrefixPhone(String phone) {

@@ -21,6 +21,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/Topic/**")
                 .excludePathPatterns("/api/login/**")
                 .excludePathPatterns("/api/Like/getUserLikeType")
+                .excludePathPatterns("/api/search/**")
         ;                    // 拦截所有请求，通过判断是否有 @LoginRequired 注解 决定是否需要登录
         super.addInterceptors(registry);
     }
