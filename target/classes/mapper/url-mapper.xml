@@ -7,7 +7,7 @@
         select * from url where id &lt;=100 ;
     </select>
     <select id="getSearchUrl" resultType="com.blog.entity.Url">
-        select * from url where id &gt;= 101 ;
+        select * from url where id &gt;= 101 and id &lt;=200 ;
     </select>
     <select id="getMessageUrl" resultType="com.blog.entity.Url">
         select * from url where id &gt;= 201 ;
