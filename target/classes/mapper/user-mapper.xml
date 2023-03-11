@@ -40,6 +40,9 @@
     <select id="selectByphone" resultType="com.blog.entity.User">
         select <include refid="selectFields"></include> from user where phone = #{phone};
     </select>
+    <select id="getUserInfo" resultType="com.blog.entity.Vo.FriendVo">
+        select * from user where accountId = #{accountId}
+    </select>
 
 
 </mapper>

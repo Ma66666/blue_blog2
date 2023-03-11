@@ -1,6 +1,6 @@
 package com.blog;
 
-import com.blog.dao.UserMapper;
+import com.blog.entity.dao.UserMapper;
 import com.blog.entity.Vo.UserVo;
 import com.blog.service.UserService;
 import org.junit.Test;

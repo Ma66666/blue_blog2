@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.entity.dao.FriendMapper">
+    <select id="getFriendList" resultType="java.lang.String">
+        SELECT friend_accountId FROM `friend` where user_accountId = #{accountId} union all
+        select user_accountId from friend where friend_accountId = #{accountId}
+    </select>
+</mapper>

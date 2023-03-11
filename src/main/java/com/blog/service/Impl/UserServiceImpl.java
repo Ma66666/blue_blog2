@@ -2,7 +2,7 @@ package com.blog.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.blog.config.QiNiuYunConfig;
-import com.blog.dao.UserMapper;
+import com.blog.entity.dao.UserMapper;
 import com.blog.entity.User;
 import com.blog.entity.Vo.UserVo;
 import com.blog.entity.Vo.loginVo;
@@ -10,7 +10,6 @@ import com.blog.entity.Vo.RegisterVo;
 import com.blog.service.UserService;
 import com.blog.util.*;
 import com.blog.util.ExceptionHandler.BlogException;
-import com.blog.util.result.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.blog.dao;
+package com.blog.entity.dao;
 
 import com.blog.entity.Comment;
 import com.blog.entity.Vo.CommentVo;

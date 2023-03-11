@@ -1,4 +1,4 @@
-package com.blog.dao;
+package com.blog.entity.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 

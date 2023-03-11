@@ -1,17 +1,15 @@
 package com.blog.service.Impl;
 
-import com.blog.dao.BlogMapper;
+import com.blog.entity.dao.BlogMapper;
 import com.blog.entity.Blog;
 import com.blog.entity.Vo.BlogListVo;
 import com.blog.entity.Vo.BlogVo;
 import com.blog.service.BlogService;
 import com.blog.util.GetSetRedis;
-import com.blog.util.GetTokenAccountId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

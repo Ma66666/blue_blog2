@@ -1,10 +1,7 @@
 package com.blog.service;
 
 
-import com.blog.dao.es.EsVo;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 public interface EsService {

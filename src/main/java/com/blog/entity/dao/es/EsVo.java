@@ -1,4 +1,4 @@
-package com.blog.dao.es;
+package com.blog.entity.dao.es;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;

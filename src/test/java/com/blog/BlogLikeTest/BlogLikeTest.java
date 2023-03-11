@@ -1,7 +1,7 @@
 package com.blog.BlogLikeTest;
 
 import com.blog.BlueBlogApplication;
-import com.blog.dao.BlogLikeMapper;
+import com.blog.entity.dao.BlogLikeMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

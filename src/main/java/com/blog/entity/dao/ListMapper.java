@@ -1,4 +1,4 @@
-package com.blog.dao;
+package com.blog.entity.dao;
 
 import com.blog.entity.Dto.PageDto;
 import com.blog.entity.Vo.BlogListVo;

@@ -1,6 +1,7 @@
-package com.blog.dao;
+package com.blog.entity.dao;
 
 import com.blog.entity.User;
+import com.blog.entity.Vo.FriendVo;
 import com.blog.entity.Vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +16,6 @@ public interface  UserMapper {
    int updateUserInfo(UserVo userVo); //更换用户信息
 
    int updateUserImg(String accountId,String headerUrl); //更换用户头像
+   FriendVo getUserInfo(String accountId);
 
 }

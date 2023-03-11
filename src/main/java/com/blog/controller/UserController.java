@@ -3,6 +3,7 @@ package com.blog.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.blog.entity.Vo.UserVo;
+import com.blog.service.FriendService;
 import com.blog.util.BlogToken;
 import com.blog.util.ExceptionHandler.BlogException;
 import com.blog.util.result.Result;
@@ -31,6 +32,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FriendService friendService;
+
     @ApiOperation(value = "获取个人用户信息")
     @GetMapping("getUserInfo")
     public Result getUserInfo(HttpServletRequest request){
@@ -55,6 +59,11 @@ public class UserController {
         }        return Result.fail("更换失败");
     }
 
+    @ApiOperation(value = "获得好友列表")
+    @GetMapping("/getFriendList")
+    public Result getFriendList(HttpServletRequest httpServletRequest){
+        return Result.ok(friendService.getFriendList(httpServletRequest));
+    }
 
 
 

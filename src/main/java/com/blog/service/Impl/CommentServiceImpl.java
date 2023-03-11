@@ -1,6 +1,6 @@
 package com.blog.service.Impl;
 
-import com.blog.dao.CommentMapper;
+import com.blog.entity.dao.CommentMapper;
 import com.blog.entity.Comment;
 import com.blog.entity.Dto.CommentDto;
 import com.blog.entity.Vo.CommentVo;
@@ -12,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
