@@ -3,8 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blog.dao.FriendMapper">
+    <update id="deleteFriend">
+        update friend set delete_type = 1 where user1_user2= #{user1_user2}
+    </update>
+
+
     <select id="getFriendList" resultType="java.lang.String">
-        SELECT friend_accountId FROM `friend` where user_accountId = #{accountId} union all
-        select user_accountId from friend where friend_accountId = #{accountId}
+        SELECT friend_accountId FROM `friend` where user_accountId = #{accountId} and status = 1 and delete_type = 0 union all
+        select user_accountId from friend where friend_accountId = #{accountId} and status = 1 and delete_type = 0
     </select>
+
+    <select id="queryApplyList" resultType="com.blog.entity.Vo.ApplyVo">
+        select  user.accountId,user.username,user.p_signature,user.sex,user.header_url,friend.create_time
+        from friend left  join user
+            on user_accountId = accountId
+        where friend_accountId = #{accountId} and friend.status = 0;
+    </select>
+
+    <select id="queryApplyCount" resultType="java.lang.Integer">
+        select count(*) from friend where friend_accountId = #{friend_accountId} and status = 0
+    </select>
+
+    <update id="updateApplyStatus">
+        update friend set status = #{status} where user_accountId = #{user_accountId} and friend_accountId =#{friend_accountId}
+    </update>
+
+
 </mapper>

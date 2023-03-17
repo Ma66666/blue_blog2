@@ -1,8 +1,8 @@
 package com.blog.controller;
 
 import com.blog.config.QiNiuYunConfig;
-import com.blog.entity.dao.ListMapper;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.ListMapper;
+import com.blog.dao.UserMapper;
 import com.blog.service.BlogService;
 import com.blog.service.CommentService;
 import com.blog.service.LikeService;
@@ -96,6 +96,8 @@ public class DemoController {
         }
         return Result.ok(likeService.hasLike(AccountId,BeLikeAccountId));
     }
+
+
 
 
 

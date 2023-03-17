@@ -1,6 +1,6 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.CommentMapper;
+import com.blog.dao.CommentMapper;
 import com.blog.entity.Comment;
 import com.blog.entity.Dto.CommentDto;
 import com.blog.entity.Vo.CommentVo;

@@ -1,6 +1,6 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.BlogMapper;
+import com.blog.dao.BlogMapper;
 import com.blog.entity.Blog;
 import com.blog.entity.Vo.BlogListVo;
 import com.blog.entity.Vo.BlogVo;

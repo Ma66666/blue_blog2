@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.blog.entity.dao.UrlMapper">
+<mapper namespace="com.blog.dao.UrlMapper">
     <select id="getUrl" resultType="com.blog.entity.Url">
         select * from url where id &lt;=100 ;
     </select>

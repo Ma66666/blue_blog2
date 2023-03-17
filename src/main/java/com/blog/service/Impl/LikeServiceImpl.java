@@ -1,8 +1,8 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.BlogMapper;
-import com.blog.entity.dao.CommentMapper;
-import com.blog.entity.dao.LikeMapper;
+import com.blog.dao.BlogMapper;
+import com.blog.dao.CommentMapper;
+import com.blog.dao.LikeMapper;
 import com.blog.entity.Vo.LikeVo;
 import com.blog.service.LikeService;
 import com.blog.util.GetSetRedis;

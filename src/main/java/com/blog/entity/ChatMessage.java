@@ -24,6 +24,7 @@ public class ChatMessage {
     @ApiModelProperty(value = "发送内容")
     private String message;
 
+
     @ApiModelProperty(value = "创建时间")
      private Date createTime;
     @ApiModelProperty(value = "状态：0未读,1以读,2删除")

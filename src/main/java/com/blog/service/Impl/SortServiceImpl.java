@@ -1,6 +1,6 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.SortMapper;
+import com.blog.dao.SortMapper;
 import com.blog.entity.Sort;
 import com.blog.service.SortService;
 import org.springframework.stereotype.Service;

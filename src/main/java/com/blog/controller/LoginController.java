@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -87,10 +88,11 @@ public class LoginController {
 
     @ApiOperation("登录")
     @PostMapping("login")
-    public Result login (@RequestBody loginVo loginuser){
+    public Result login (@RequestBody loginVo loginuser,HttpServletResponse response){
         if (loginuser == null){
             throw new BlogException(ResultCodeEnum.DATA_ERROR);
         }
+
         return Result.ok(userService.login(loginuser));
     }
 

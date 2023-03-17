@@ -65,6 +65,35 @@ public class UserController {
         return Result.ok(friendService.getFriendList(httpServletRequest));
     }
 
+    @ApiOperation(value = "查看申请列表")
+    @GetMapping("/getApplyList")
+    public Result getApplyList(HttpServletRequest httpServletRequest){
+        return Result.ok(friendService.getApplyList(httpServletRequest));
+    }
+
+    @ApiOperation(value = "更新申请状态")
+    @PostMapping("/updateApplyStatus")
+    public Result updateApplyStatus(HttpServletRequest httpServletRequest,
+                                    @RequestParam("user_accountId") String user_accountId,
+                                    @RequestParam("status") int status
+                                    ){
+        System.out.println(status);
+        friendService.updateApplyStatus(httpServletRequest,user_accountId,status);
+        return Result.ok("更新成功");
+    }
+    @ApiOperation(value = "更新申请状态")
+    @PostMapping("/deleteFriend")
+    public Result deleteFriend(HttpServletRequest httpServletRequest, @RequestParam("user_accountId") String user_accountId){
+        friendService.deleteFriend(httpServletRequest,user_accountId);
+        return Result.ok("删除成功");
+    }
+
+    @ApiOperation(value = "查询用户的好友申请数量")
+    @GetMapping("/getApplyCount")
+    public Result getApplyCount(HttpServletRequest httpServletRequest){
+       return Result.ok(friendService.queryApplyCount(httpServletRequest));
+    }
+
 
 
 }

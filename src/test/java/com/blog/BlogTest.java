@@ -1,9 +1,9 @@
 package com.blog;
 
 
-import com.blog.entity.dao.FriendMapper;
-import com.blog.entity.dao.ListMapper;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.FriendMapper;
+import com.blog.dao.ListMapper;
+import com.blog.dao.UserMapper;
 import com.blog.entity.Dto.PageDto;
 import com.blog.entity.Vo.FriendVo;
 import org.junit.Test;

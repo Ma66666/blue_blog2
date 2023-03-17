@@ -2,8 +2,8 @@ package com.blog;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.blog.entity.dao.LikeMapper;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.LikeMapper;
+import com.blog.dao.UserMapper;
 import com.blog.entity.User;
 import com.blog.entity.Vo.LikeVo;
 import com.blog.entity.Vo.UserVo;

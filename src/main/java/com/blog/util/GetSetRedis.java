@@ -112,7 +112,8 @@ public class GetSetRedis {
      */
     public Boolean setValue(String phone,String code){
         try {
-            redisTemplate.opsForValue().set(getPrefixPhone(phone),code,1, TimeUnit.DAYS);
+//            redisTemplate.opsForValue().set(getPrefixPhone(phone),code,1, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(getPrefixPhone(phone),code);
             return true;
         }catch (Exception e){
             return false;

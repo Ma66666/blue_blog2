@@ -1,7 +1,9 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.FriendMapper;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.ChatListMapper;
+import com.blog.dao.FriendMapper;
+import com.blog.dao.UserMapper;
+import com.blog.entity.Vo.ApplyVo;
 import com.blog.entity.Vo.FriendVo;
 import com.blog.service.FriendService;
 import com.blog.util.ExceptionHandler.BlogException;
@@ -22,6 +24,9 @@ public class FriendServiceImpl implements FriendService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ChatListMapper chatListMapper;
     @Override
     public List<FriendVo> getFriendList(HttpServletRequest httpServletRequest) {
         String accountId = GetTokenAccountId.getTokenAccountId(httpServletRequest);
@@ -34,5 +39,35 @@ public class FriendServiceImpl implements FriendService {
             userVos.add(userMapper.getUserInfo(str));
         }
         return userVos;
+    }
+
+    @Override
+    public List<ApplyVo> getApplyList(HttpServletRequest httpServletRequest) {
+        String accountId = GetTokenAccountId.getTokenAccountId(httpServletRequest);
+        if (accountId.equals("空的")){
+            throw new BlogException(SIGN_ERROR);
+        }
+        List<ApplyVo> friendVos = friendMapper.queryApplyList(accountId);
+        return friendVos;
+    }
+
+    @Override
+    public void updateApplyStatus(HttpServletRequest httpServletRequest, String user_accountId, int status) {
+        String friend_accountId = GetTokenAccountId.getTokenAccountId(httpServletRequest);
+        friendMapper.updateApplyStatus(user_accountId,friend_accountId,status);
+    }
+
+    @Override
+    public void deleteFriend(HttpServletRequest httpServletRequest, String user_accountId) {
+        String accountId = GetTokenAccountId.getTokenAccountId(httpServletRequest);
+        String user1_user2 = chatListMapper.queryUserContact(accountId,user_accountId);
+        friendMapper.deleteFriend(user1_user2);
+
+    }
+
+    @Override
+    public int queryApplyCount(HttpServletRequest httpServletRequest) {
+        String friend_accountId = GetTokenAccountId.getTokenAccountId(httpServletRequest);
+        return friendMapper.queryApplyCount(friend_accountId);
     }
 }

@@ -25,10 +25,15 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>cn.hutool</groupId>-->
+<!--            <artifactId>hutool-json</artifactId>-->
+<!--            <version>5.8.10</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>5.8.10</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
         <dependency>

@@ -1,6 +1,6 @@
 package com.blog.service.Impl;
 
-import com.blog.entity.dao.UrlMapper;
+import com.blog.dao.UrlMapper;
 import com.blog.entity.Url;
 import com.blog.service.UrlService;
 import org.springframework.beans.factory.annotation.Autowired;

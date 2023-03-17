@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.blog.entity.dao.ListMapper">
+<mapper namespace="com.blog.dao.ListMapper">
     <sql id="selectFields">
         blog.id,username,header_url,title,content,hot,blog.create_time,cover
     </sql>

@@ -2,11 +2,12 @@ package com.blog.es;
 
 import com.alibaba.fastjson.JSON;
 import com.blog.BlueBlogApplication;
-import com.blog.entity.dao.BlogLikeMapper;
-import com.blog.entity.dao.es.BlogRepository;
-import com.blog.entity.dao.es.EsMapper;
-import com.blog.entity.dao.es.EsVo;
+import com.blog.dao.BlogLikeMapper;
+import com.blog.dao.es.BlogRepository;
+import com.blog.dao.es.EsMapper;
+import com.blog.dao.es.EsVo;
 import com.blog.util.ElasticsearchUtil;
+import com.blog.util.GetSetRedis;
 import com.blog.util.HtmlFilter;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -30,6 +31,7 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -61,11 +63,18 @@ public class EsTest {
     @Autowired
     private ElasticsearchTemplate elasticTemplate;
 
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
+    @Autowired
+    private GetSetRedis getSetRedis;
+
     @Test
     public void testInsert(){
         List<EsVo> list = esMapper.queryBlog();
         for(EsVo esVo :list){
             esVo.setContent(HtmlFilter.delHtmlTags(esVo.getContent()));
+            esVo.setLikeCount(redisTemplate.opsForSet().size(GetSetRedis.getBlogLikeKey(esVo.getId()+"")).intValue());
             esVo.list.add(esVo.getImage1());
             esVo.list.add(esVo.getImage2());
             esVo.list.add(esVo.getImage3());
@@ -93,7 +102,7 @@ public class EsTest {
 //         System.out.println(updateResponse.status());
 //         elasticsearchTemplate.update()
          EsVo esVo  = new EsVo();
-         esVo.setUsername("大黄");
+         esVo.setUsername("大黄1111");
          esVo.setId(27);
          System.out.println(JSON.toJSONString(elasticsearchUtil.update("blogvo","_doc",esVo)));
 

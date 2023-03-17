@@ -1,8 +1,9 @@
 package com.blog.Friend;
 
 import com.blog.BlueBlogApplication;
-import com.blog.entity.dao.FriendMapper;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.FriendMapper;
+import com.blog.dao.UserMapper;
+import com.blog.entity.Vo.ApplyVo;
 import com.blog.entity.Vo.FriendVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ public class test {
     @Autowired
     private FriendMapper friendMapper;
 
+
     @Test
     public void getFriendList(){
         List<String> list = friendMapper.getFriendList("Hot12345");
@@ -33,4 +35,15 @@ public class test {
         }
         System.out.println(userVos);
     }
+    @Test
+    public void getApplyList(){
+        List<ApplyVo> applyVos = friendMapper.queryApplyList("Hot12345");
+        System.out.println(applyVos);
+    }
+
+    @Test
+    public void updateApplyStatus(){
+        friendMapper.updateApplyStatus("YSKM2288","Hot12345",1);
+    }
+
 }

@@ -2,7 +2,7 @@ package com.blog.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.blog.config.QiNiuYunConfig;
-import com.blog.entity.dao.UserMapper;
+import com.blog.dao.UserMapper;
 import com.blog.entity.User;
 import com.blog.entity.Vo.UserVo;
 import com.blog.entity.Vo.loginVo;

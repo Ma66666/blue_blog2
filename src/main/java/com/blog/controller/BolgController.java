@@ -129,15 +129,17 @@ public class BolgController {
         return Result.ok(respMap);
     }
 
+
+
+
     //发博客页面删除图片功能
-    @ApiOperation(value = "博客页面输图片功能")
+    @ApiOperation(value = "编辑草稿博客页面输图片功能")
     @PostMapping ("/delectImg")
-    public Result DeleteImg(@RequestParam(value = "Img")String Img){
-        if (Img == null){
+    public Result DeleteImg1(@RequestParam(value = "Img")String Img){
+        if (Img.equals(null)){
             throw new BlogException(DATA_ERROR);
         }
         qiNiuYunConfig.deleteFile1(Img);
         return Result.ok("删除成功");
     }
-
 }
