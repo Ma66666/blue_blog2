@@ -3,14 +3,16 @@ package com.blog.es;
 import com.alibaba.fastjson.JSON;
 import com.blog.BlueBlogApplication;
 import com.blog.dao.BlogLikeMapper;
-import com.blog.dao.es.BlogRepository;
-import com.blog.dao.es.EsMapper;
-import com.blog.dao.es.EsVo;
+import com.blog.dao.es.*;
 import com.blog.util.ElasticsearchUtil;
 import com.blog.util.GetSetRedis;
 import com.blog.util.HtmlFilter;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -31,15 +33,14 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,7 +51,8 @@ public class EsTest {
     @Autowired
     private BlogRepository blogRepository;
 
-
+@Autowired
+private UserRepository userRepository;
 
     @Autowired
     private EsMapper esMapper;
@@ -88,7 +90,12 @@ public class EsTest {
         }
         blogRepository.saveAll(list);
     }
+    @Test
+    public void testInsert1(){
+        List<UserEsVo> list = esMapper.queryUser();
 
+        userRepository.saveAll(list);
+    }
     //更新数据
      @Test
      public void update() throws IOException {
@@ -98,13 +105,28 @@ public class EsTest {
 //         EsVo esVo = new EsVo();
 //         esVo.setUsername("Hot");
 //         updateRequest.doc(JSON.toJSONString(esVo), XContentType.JSON);
-//         UpdateResponse updateResponse = client.update(updateRequest,RequestOptions.DEFAULT);
+//         UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
 //         System.out.println(updateResponse.status());
-//         elasticsearchTemplate.update()
+//         elasticTemplate.update();
          EsVo esVo  = new EsVo();
-         esVo.setUsername("大黄1111");
-         esVo.setId(27);
-         System.out.println(JSON.toJSONString(elasticsearchUtil.update("blogvo","_doc",esVo)));
+         esVo.setLikeCount(3);
+         esVo.setId(9);
+         esVo.setUsername("大黄");
+         esVo.setLikeType(1);
+
+         UpdateRequest updateRequest = new UpdateRequest();
+         Map<String,Object> map = new HashMap<>();
+         map.put("likeCount",10);
+
+         updateRequest.doc(map);
+         UpdateQueryBuilder updateQueryBuilder = new UpdateQueryBuilder();
+         updateQueryBuilder.withId("9");
+         updateQueryBuilder.withUpdateRequest(updateRequest);
+         updateQueryBuilder.withClass(EsVo.class);
+         UpdateQuery updateQuery = updateQueryBuilder.build();
+        elasticTemplate.update(updateQuery);
+
+//         System.out.println(JSON.toJSONString(elasticsearchUtil.update("blogvo","_doc",esVo)));
 
      }
     @Test

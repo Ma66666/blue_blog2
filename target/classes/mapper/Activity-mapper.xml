@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.ActivityMapper">
+    <insert id="insertBActivity" parameterType="Activity"
+            useGeneratedKeys="true" keyProperty="id"
+    >
+        insert into activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="activityName != null">activity_name,</if>
+            <if test="activityInfo != null">activity_info,</if>
+            <if test="activityCover != null">activity_cover,</if>
+            <if test="activityPeople != null">activity_people,</if>
+            <if test="activityAccountid != null">activity_accountId,</if>
+            <if test="activityCreateTime != null">activity_create_time,</if>
+            <if test="activityendTime != null">activityend_time,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="price != null">price,</if>
+            <if test="place != null">place,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="activityName != null">#{activityName},</if>
+            <if test="activityInfo != null">#{activityInfo},</if>
+            <if test="activityCover != null">#{activityCover},</if>
+            <if test="activityPeople != null">#{activityPeople},</if>
+            <if test="activityAccountid != null">#{activityAccountid},</if>
+            <if test="activityCreateTime != null">#{activityCreateTime},</if>
+            <if test="activityendTime != null">#{activityendTime},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="price != null">#{price},</if>
+            <if test="place != null">#{place},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+    <update id="updatePeopleNum">
+        update activity set activity_people = #{Num} where id = #{id}
+    </update>
+    <update id="updateActivityStatus">
+        update activity set status = #{status} where id= #{id}
+    </update>
+
+
+    <select id="queryActivityById" resultType="com.blog.entity.Activity">
+        select * from activity where id =#{id};
+    </select>
+    <select id="queryOfficialActivityList" resultType="com.blog.entity.Activity">
+        SELECT * FROM `activity` where status = 1 and  DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;=activity_create_time
+                                   and DATE_FORMAT(NOW(), '%Y-%m-%d')  &lt;= activityend_time
+    </select>
+    <select id="queryEndOfficialActivityList" resultType="com.blog.entity.Activity">
+        SELECT * FROM `activity` where status = 1 and   DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;activityend_time
+    </select>
+    <select id="querySelfActivityList" resultType="com.blog.entity.Activity">
+        SELECT * FROM `activity` where status = 2 and  DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;=activity_create_time
+                                   and DATE_FORMAT(NOW(), '%Y-%m-%d')  &lt;= activityend_time
+    </select>
+    <select id="queryEndSelfActivityList" resultType="com.blog.entity.Activity">
+        SELECT * FROM `activity` where status = 2 and   DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;activityend_time
+    </select>
+    <select id="queryLikeActivityList" resultType="com.blog.entity.Activity">
+        select * from activity where activity_name like '%' #{condition} '%' or activity_info like '%' #{condition} '%'
+    </select>
+
+</mapper>

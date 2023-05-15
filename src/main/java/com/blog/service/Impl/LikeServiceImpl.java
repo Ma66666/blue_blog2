@@ -1,14 +1,22 @@
 package com.blog.service.Impl;
 
 import com.blog.dao.BlogMapper;
+import com.blog.dao.ChatMessageMapper;
 import com.blog.dao.CommentMapper;
 import com.blog.dao.LikeMapper;
+import com.blog.dao.es.EsVo;
+import com.blog.entity.ChatMessage;
 import com.blog.entity.Vo.LikeVo;
 import com.blog.service.LikeService;
 import com.blog.util.GetSetRedis;
 import com.blog.util.GetTokenAccountId;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
@@ -35,6 +43,16 @@ public class LikeServiceImpl implements LikeService {
     @Autowired
     private LikeMapper likeMapper;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
+
+
+    @Autowired
+    private ElasticsearchTemplate elasticTemplate;
+
     /**
      * 用户点赞博客，不用返回值
      * @param blogId 博客Id
@@ -51,11 +69,22 @@ public class LikeServiceImpl implements LikeService {
            redisTemplate.opsForSet().remove(entityLikeKey,accountId);
            //博客点赞数减去1
            blogMapper.cutLike(blogId);
+            rabbitTemplate.convertAndSend("Blue.Topic", "BlogUnLike", blogId);
         }else {
             //添加该记录
             redisTemplate.opsForSet().add(entityLikeKey,accountId);
             //博客点赞数加1
             blogMapper.updataLike(blogId);
+            rabbitTemplate.convertAndSend("Blue.Topic", "BlogLike", blogId);
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setMessage("点赞了您的博客:”"+blogMapper.queryById(blogId).getTitle()+"”");
+            chatMessage.setSendAccountId(accountId);
+            chatMessage.setToAccountId(blogMapper.queryUserAccountId(blogId));
+            chatMessage.setCreateTime(new Date());
+            chatMessage.setType(1);
+            chatMessage.setBlogId(blogId);
+            chatMessage.setUser1User2("1");
+            chatMessageMapper.insertNotice(chatMessage);
         }
     }
 
@@ -65,7 +94,7 @@ public class LikeServiceImpl implements LikeService {
      * @param accountId 用户ID
      */
     @Override
-    public void CommentLike(int id, String accountId) {
+    public void CommentLike(int id,int blogId, String accountId) {
         String entityLikeKey = GetSetRedis.getCommentLikeKey(""+id);
         boolean islike  =  redisTemplate.opsForSet().isMember(entityLikeKey,accountId);
         if (islike) {
@@ -74,6 +103,16 @@ public class LikeServiceImpl implements LikeService {
         }else {
             redisTemplate.opsForSet().add(entityLikeKey,accountId);
             commentMapper.updataLike(id);
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setMessage("点赞了您的评论:”"+commentMapper.queryComment(id).getContent()+"”");
+            chatMessage.setSendAccountId(accountId);
+            chatMessage.setToAccountId(commentMapper.queryComment(id).getAccountId());
+            chatMessage.setCreateTime(new Date());
+            chatMessage.setType(1);
+            chatMessage.setBlogId(blogId);
+            chatMessage.setCommentId(id);
+            chatMessage.setUser1User2("1");
+            chatMessageMapper.insertNotice(chatMessage);
         }
     }
 
@@ -92,6 +131,15 @@ public class LikeServiceImpl implements LikeService {
         }else {
             redisTemplate.opsForSet().add(entityLikeKey,accountId);
             blogMapper.updataCollectLike(blogId);
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setMessage("收藏了您的博客:”"+blogMapper.queryById(blogId).getTitle()+"”");
+            chatMessage.setSendAccountId(accountId);
+            chatMessage.setToAccountId(blogMapper.queryUserAccountId(blogId));
+            chatMessage.setCreateTime(new Date());
+            chatMessage.setType(1);
+            chatMessage.setBlogId(blogId);
+            chatMessage.setUser1User2("1");
+            chatMessageMapper.insertNotice(chatMessage);
 
         }
     }
@@ -116,6 +164,15 @@ public class LikeServiceImpl implements LikeService {
                 return operations.exec();
             }
         });
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setMessage("关注了您");
+        chatMessage.setSendAccountId(accountId);
+        chatMessage.setToAccountId(BeLikeAccountId);
+        chatMessage.setCreateTime(new Date());
+        chatMessage.setUser1User2("1");
+        chatMessage.setType(3);
+        chatMessage.setUser1User2("1");
+        chatMessageMapper.insertNotice(chatMessage);
 
     }
 

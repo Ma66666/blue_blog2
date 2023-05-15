@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.GroupChatMapper">
+
+
+    <insert id="insertGroupChat">
+        insert into groupchat (accountId,chatNumber,status,header_url,delete_type,create_time,name) values (#{accountId},#{chatNumber},#{status},#{headerUrl}
+        ,#{deleteType},#{createTime},#{name}
+        )
+    </insert>
+    <update id="updateGroupChat">
+        update groupchat set name =#{name} where chatNumber = #{chatNumber}
+    </update>
+    <update id="deleteGroupChat">
+        update groupchat set status =#{status} where chatNumber = #{chatNumber} and accountId =#{accountId}
+    </update>
+    <update id="updateCount">
+        update groupchat set num = 0 where accountId =#{accountId} and chatNumber = #{chatNumber}
+    </update>
+    <update id="updateCount1">
+        update groupchat set num = num+1 where accountId !=#{accountId} and chatNumber = #{chatNumber}
+    </update>
+    <update id="updatequeren">
+        update groupchat set status = 2 where accountId =#{accountId} and chatNumber = #{chatNumber}
+    </update>
+    <select id="selectGroupChat" resultType="com.blog.entity.GroupChat">
+        select * from groupchat where accountId =#{accountId}  and status != 3  order by update_time desc
+    </select>
+    <select id="queryUser" resultType="com.blog.entity.User">
+        select * from user where accountId=#{accountId}
+    </select>
+    <select id="selectGroupChat1" resultType="com.blog.entity.GroupChat">
+        select * from groupchat where chatNumber =#{chatNumber}  and status != 3 order by create_time asc
+    </select>
+    <select id="queryUserStatus" resultType="java.lang.String">
+        select status from groupchat where accountId =#{accountId} and chatNumber = #{chatNumber}
+    </select>
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*)from groupchat where accountId =#{accountId} and chatNumber = #{chatNumber} and (status=3 or status =1 or status =2)
+    </select>
+    <select id="selectGroupChat2" resultType="com.blog.entity.GroupChat">
+        select * from groupchat group by chatNumber
+    </select>
+    <select id="queryZHUren" resultType="java.lang.String">
+        select accountId from groupchat where chatNumber=#{chatNumber} and status = 1;
+    </select>
+
+
+</mapper>

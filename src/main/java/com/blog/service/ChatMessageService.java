@@ -3,6 +3,7 @@ package com.blog.service;
 
 import com.blog.entity.Vo.ChatUserListVo;
 import com.blog.entity.Vo.MessageListVo;
+import com.blog.entity.Vo.NoticeVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -24,5 +25,18 @@ public interface ChatMessageService {
      */
     List<MessageListVo> queryMessageList(HttpServletRequest httpServletRequest,String user1_user2);
 
+    //插入用户聊天信息
     String insertMessage(HttpServletRequest httpServletRequest,String toAccountId,String message);
+
+    //查询赞和收藏通知
+    List<NoticeVo> queryZanNotice(HttpServletRequest httpServletRequest);
+
+    //查询评论通知
+    List<NoticeVo> queryCommentNotice(HttpServletRequest httpServletRequest);
+
+    //查询关注信息
+    List<NoticeVo> queryLikeNotice(HttpServletRequest httpServletRequest);
+
+    //查询关注信息
+    List<NoticeVo> querySystemNotice(HttpServletRequest httpServletRequest);
 }

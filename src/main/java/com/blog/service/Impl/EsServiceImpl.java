@@ -2,9 +2,7 @@ package com.blog.service.Impl;
 
 import com.blog.dao.BlogLikeMapper;
 import com.blog.dao.CommentMapper;
-import com.blog.dao.es.BlogRepository;
-import com.blog.dao.es.EsMapper;
-import com.blog.dao.es.EsVo;
+import com.blog.dao.es.*;
 import com.blog.service.EsService;
 import com.blog.util.GetSetRedis;
 import com.blog.util.GetTokenAccountId;
@@ -57,6 +55,9 @@ public class EsServiceImpl implements EsService {
 
     @Autowired
     private ElasticsearchTemplate elasticTemplate;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -298,8 +299,6 @@ public class EsServiceImpl implements EsService {
                 //遍历查询结果为 EsVo赋值
                 for (SearchHit hit : hits) {
                     EsVo esVo = new EsVo();
-
-
                     esVo.setId(Integer.valueOf(hit.getSourceAsMap().get("id").toString()));
 
                     esVo.setAccountId(hit.getSourceAsMap().get("accountId").toString());
@@ -382,6 +381,29 @@ public class EsServiceImpl implements EsService {
         map.put("EsBlogListVo",page.getContent());
         map.put("total",page.getContent().size());
         map.put("all",page.getTotalElements());
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> queryEsUserListByCondition(int pagenum, int pagesize, HttpServletRequest httpServletRequest, String searchData) {
+        String accountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+        Map<String,Object> map = new HashMap<>();
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                //查询条件
+//                .withQuery(QueryBuilders.multiMatchQuery("高颜值6767677","title","content"))
+                //排序
+                .withQuery(QueryBuilders.multiMatchQuery(searchData, "username", "accountId"))
+//                .withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
+                .withPageable(PageRequest.of(pagenum,pagesize))
+                .withHighlightFields(
+                        new HighlightBuilder.Field("username").preTags("<em>").postTags("</em>"),
+                        new HighlightBuilder.Field("accountId").preTags("<em>").postTags("</em>")
+                ).build();
+        Page<UserEsVo> page = userRepository.search(searchQuery);
+
+        map.put("total",page.getContent().size());
+        map.put("all",page.getTotalElements());
+        map.put("EsBlogListVo",page.getContent());
         return map;
     }
 }

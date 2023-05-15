@@ -31,6 +31,9 @@ public interface BlogMapper {
 
     List<BlogListVo> queryUserBlogList(String accountId); //查找目标用户博客信息
 
+    //查询发布这个博客的人的Id
+    String queryUserAccountId(int blogId);
+
 
 
 

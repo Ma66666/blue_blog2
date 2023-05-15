@@ -57,6 +57,9 @@
             on blog.accountId = user.accountId
         where type = 1 and blog.accountId =#{accountId}
     </select>
+    <select id="queryUserAccountId" resultType="java.lang.String">
+        select accountId from blog where id =#{blogId}
+    </select>
 
 
 </mapper>

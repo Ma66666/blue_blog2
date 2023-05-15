@@ -11,6 +11,7 @@ public interface EsMapper {
 
     List<EsVo> queryEsBlogListByMyLikeBlog(List<Integer> list);
 
+    List<UserEsVo> queryUser();//查询所有用户（用户存储es)
 
 
 

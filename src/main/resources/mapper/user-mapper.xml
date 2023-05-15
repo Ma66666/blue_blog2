@@ -19,7 +19,7 @@
         values(#{accountId},#{username}, #{password}, #{salt}, #{phone},  #{status},  #{headerUrl}, #{createTime},#{sex})
     </insert>
     <update id="updateUserInfo">
-        update user set username = #{username} , sex =#{sex},p_signature = #{signature} where accountId = #{accountId}
+        update user set username = #{username} , sex =#{sex},p_signature = #{pSignature} where accountId = #{accountId}
     </update>
     <update id="updateUserImg">
         update user set header_url = #{headerUrl} where accountId = #{accountId}
@@ -42,6 +42,9 @@
     </select>
     <select id="getUserInfo" resultType="com.blog.entity.Vo.FriendVo">
         select * from user where accountId = #{accountId}
+    </select>
+    <select id="queryUserlIST" resultType="com.blog.entity.Vo.UserVo">
+        select * from user where username like '%' #{condition} '%' or accountId like '%' #{condition} '%'
     </select>
 
 

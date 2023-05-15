@@ -26,7 +26,7 @@ public class UserTest {
         userVo.setAccountId("OjNiPqde");
         userVo.setSex("2");
         userVo.setUsername("我是大狗");
-        userVo.setSignature("不做第一");
+        userVo.setPSignature("不做第一");
         userVo.setStatus("0");
         if (userMapper.updateUserInfo(userVo) == 1) {
             System.out.println("返回值" + true);

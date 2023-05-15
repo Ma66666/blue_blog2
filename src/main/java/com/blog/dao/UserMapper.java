@@ -5,6 +5,8 @@ import com.blog.entity.Vo.FriendVo;
 import com.blog.entity.Vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface  UserMapper {
    User selectByAccountId(String accountId,String phone);//获取user信息
@@ -18,5 +20,8 @@ public interface  UserMapper {
    int updateUserImg(String accountId,String headerUrl); //更换用户头像
 
    FriendVo getUserInfo(String accountId); //
+
+   List<UserVo> queryUserlIST(String condition);
+
 
 }

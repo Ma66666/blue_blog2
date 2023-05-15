@@ -26,4 +26,9 @@ public class UrlServiceMapper implements UrlService {
     public List<Url> queryMessageList() {
         return urlMapper.getMessageUrl();
     }
+
+    @Override
+    public List<Url> queryActivityList() {
+       return urlMapper.getActivityUrl();
+    }
 }

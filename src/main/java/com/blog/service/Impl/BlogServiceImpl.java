@@ -60,7 +60,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogVo QueryBlog(int blogId,String accountId) {
         BlogVo blogVo = blogMapper.queryById(blogId);
-        //查看用户是否
+        //查看用户是否关注或点赞
         String entityLikeKey = GetSetRedis.getBlogLikeKey(""+blogId);
         String entityLikeKey1 =GetSetRedis.getBlogCollectKey(""+blogId);
         if (accountId=="空的"){

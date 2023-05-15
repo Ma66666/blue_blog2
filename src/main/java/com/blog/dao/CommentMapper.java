@@ -13,12 +13,14 @@ public interface CommentMapper {
 
     int deleteComment(int id); //删除评论
 
-    List<CommentVo> queryComment(@Param("blogId") int bolgId, @Param("parentId") int parentId);//查评论
+    List<CommentVo> queryCommentList(@Param("blogId") int bolgId, @Param("parentId") int parentId);//查评论集合
 
     int queryCommentCount(int blogId); //查评论数
 
     int updataLike(int id); //like字段加1
 
     int cutLike(int id); //取消关注
+
+    CommentVo queryComment(int commentId);//查询单挑评论
 
 }

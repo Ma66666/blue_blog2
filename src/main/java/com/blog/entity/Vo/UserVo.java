@@ -12,7 +12,7 @@ public class UserVo {
     private String accountId;
     private String headerUrl;
     private String sex;
-    private String signature;
+    private String pSignature;
     private Date   createTime;
     private String status;
 }

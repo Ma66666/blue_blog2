@@ -93,7 +93,14 @@ public class UserController {
     public Result getApplyCount(HttpServletRequest httpServletRequest){
        return Result.ok(friendService.queryApplyCount(httpServletRequest));
     }
-
+    @GetMapping("getEsUseristByCondition")
+    public Result EsUserListByCondition(@RequestParam(value = "page")int pagenum,
+                                        @RequestParam("size") int size,
+                                        HttpServletRequest httpServletRequest,
+                                        @RequestParam("condition")  String condition
+    ){
+        return Result.ok(userService.queryUserList(condition));
+    }
 
 
 }

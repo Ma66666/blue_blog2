@@ -4,28 +4,67 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blog.dao.ChatMessageMapper">
     <insert id="insertChatMessage" parameterType="ChatMessage" keyProperty="id">
-        insert into chatmessage (send_accountId,to_accountId,user1_user2,message,create_time,status)
+        insert into chatmessage (send_accountId,to_accountId,user1_user2,message,create_time,status,type)
         values (
-                #{sendAccountId},#{toAccountId},#{user1User2},#{message},#{createTime},#{status}
+                #{sendAccountId},#{toAccountId},#{user1User2},#{message},#{createTime},#{status},#{type}
                )
 
     </insert>
+    <insert id="insertNotice">
+        insert into chatmessage (send_accountId,to_accountId,user1_user2,message,create_time,status,type,blogId,commentId)
+        values (
+                #{sendAccountId},#{toAccountId},#{user1User2},#{message},#{createTime},#{status},#{type},#{blogId},#{commentId}
+               )
+    </insert>
     <update id="updataChatMessageStatus">
         update chatmessage set status = 1 where user1_user2 = #{user1_user2}
+    </update>
+    <update id="updataSystem">
+        update chatmessage set status = 1 where id = #{id}
     </update>
     <select id="queryEveryChatLatestWord" resultType="com.blog.entity.ChatMessage">
         select * from chatmessage where id in(
             select max(id) from chatmessage
             where status!=2
             and(send_accountId= #{accountId} or to_accountId = #{accountId})
-            group by user1_user2) order by create_time desc
+             and user1_user2 != 1
+        group by user1_user2) order by create_time desc
     </select>
     <select id="queryChatMessageList" resultType="com.blog.entity.ChatMessage">
         select * from chatmessage where
-        status!=2 and user1_user2 = #{user1_user2} order by create_time asc;
+        status!=2 and user1_user2 = #{user1_user2} and type = 0 order by create_time asc;
     </select>
     <select id="queryChatUnreadCount" resultType="com.blog.entity.Bo.MessageCountBo">
         select count(user1_user2) as count1,user1_user2 from chatmessage
-        where status = 0 and to_accountId = #{accountId} group by user1_user2
+        where status = 0 and to_accountId = #{accountId} and user1_user2 !='1' and type = 0 group by user1_user2
+    </select>
+
+    <select id="queryZanNoticeVo" resultType="com.blog.entity.Vo.NoticeVo">
+        SELECT  send_accountId,message,blogId,chatmessage.create_time,username,header_url FROM chatmessage left join user
+        on send_accountId = accountId
+        where to_accountId= #{accountId} and type = 1
+        GROUP BY send_accountId,message,blogId
+        ORDER BY create_time desc
+    </select>
+    <select id="queryCommentNoticeVo" resultType="com.blog.entity.Vo.NoticeVo">
+        SELECT  send_accountId,message,blogId,chatmessage.create_time,username,header_url FROM chatmessage left join user
+         on send_accountId = accountId
+        where to_accountId= #{accountId} and type = 2
+        GROUP BY send_accountId,message,blogId
+        ORDER BY create_time desc
+    </select>
+    <select id="queryLikeNoticeVo" resultType="com.blog.entity.Vo.NoticeVo">
+        SELECT  send_accountId,message,blogId,chatmessage.create_time,username,header_url FROM chatmessage left join user
+                                                                                                                     on send_accountId = accountId
+        where to_accountId= #{accountId} and type = 3
+        GROUP BY send_accountId,message,blogId
+        ORDER BY create_time desc
+    </select>
+    <select id="querySystemNoticeVo" resultType="com.blog.entity.Vo.NoticeVo">
+        SELECT  chatmessage.id,send_accountId,message,blogId,chatmessage.create_time,username,header_url,chatmessage.status,user1_user2 FROM chatmessage left join user
+                                                                                                                     on send_accountId = accountId
+        where to_accountId= #{accountId} and type = 4
+        GROUP BY send_accountId,message,status
+        ORDER BY create_time desc
     </select>
 </mapper>

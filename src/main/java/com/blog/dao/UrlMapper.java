@@ -18,5 +18,8 @@ public interface UrlMapper {
     //获得消息页面的URL
     List<Url> getMessageUrl();
 
+    //获得活动页面的URL
+    List<Url> getActivityUrl();
+
 
 }

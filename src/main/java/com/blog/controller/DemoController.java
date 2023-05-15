@@ -79,13 +79,13 @@ public class DemoController {
         return Result.ok("ok");
     }
 
-    //点赞评论
-    @PostMapping(value="CommentLike")
-    public Result CommentLike(@RequestParam(value = "commentId") int id,HttpServletRequest httpServletRequest){
-        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
-        likeService.CommentLike(id,AccountId);
-        return Result.ok("ok");
-    }
+//    //点赞评论
+//    @PostMapping(value="CommentLike")
+//    public Result CommentLike(@RequestParam(value = "commentId") int id,HttpServletRequest httpServletRequest){
+//        String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
+//        likeService.CommentLike(id,AccountId);
+//        return Result.ok("ok");
+//    }
 
     @GetMapping(value = "getUserLikeType")
     public Result getUserLikeType(@RequestParam(value = "BeLikeAccountId") String BeLikeAccountId,
@@ -96,6 +96,8 @@ public class DemoController {
         }
         return Result.ok(likeService.hasLike(AccountId,BeLikeAccountId));
     }
+
+
 
 
 

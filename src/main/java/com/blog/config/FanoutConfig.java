@@ -1,46 +1,107 @@
 package com.blog.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import lombok.Data;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
+@Data
 public class FanoutConfig {
-    // itcast.fanout
+    /**
+     * 交换机
+     */
+    private String orderEventExchange="order.event.exchange";
+    /**
+     * 延迟队列，不能被消费者监听
+     */
+    private String orderCloseDelayQueue = "order.close.delay.queue";
+    /**
+     * 关单队列，延迟队列的消息过期后转发的队列，用于被消费者监听
+     */
+    private String orderCloseQueue = "order.close.queue";
+
+    /**
+     * 交换机
+     */
+    private String orderCloseExchange="order.close.exchange";
+
+    /**
+     * 进入到延迟队列的routingKey
+     */
+    private String orderCloseDelayRoutingKey = "order.close.delay.routing.key";
+    /**
+     * 进入死信队列的routingKey，消息过期进入死信队列的key
+     */
+    private String orderCloseRoutingKey = "order.close.routing.key";
+    /**
+     * 过期时间，毫秒单位，临时改为1分钟过期
+     */
+    private Integer ttl = 1000 * 60;
+    /**
+     * 消息转换器
+     * @return
+     */
     @Bean
-    public FanoutExchange fanoutExchange(){
-        return new FanoutExchange("Blue.Topic");
+    public MessageConverter messageConverter(){
+        return new Jackson2JsonMessageConverter();
+    }
+    /**
+     * 创建交换机，topic类型，一般一个业务一个交换机
+     * @return
+     */
+    @Bean
+    public Exchange orderEventExchange(){
+        return new TopicExchange(orderEventExchange,true,false);
+    }
+    /**
+     * 延迟队列getOrderEventExchange
+     * @return
+     */
+    @Bean
+    public Queue orderCloseDelayQueue(){
+        Map<String,Object> args = new HashMap<>(3);
+        args.put("x-dead-letter-exchange",orderEventExchange);
+        args.put("x-dead-letter-routing-key",orderCloseRoutingKey);
+        args.put("x-message-ttl",ttl);
+        return new Queue(orderCloseDelayQueue,true,false,false,args);
+
     }
 
-    // fanout.queue1
+    /**
+     *
+     * 死信队列，是一个普通队列，用于被监听
+     * @return
+     */
     @Bean
-    public Queue fanoutQueue1(){
-        return new Queue("Blue.queue1");
+    public Queue orderCloseQueue(){
+        return new Queue(orderCloseQueue,true,false,false);
+    }
+    /**
+     * 第一个队列 即延迟队列和交换机建立绑定关系
+     * @return
+     */
+    @Bean
+    public Binding orderCloseDelayBinding(){
+        return new Binding(orderCloseDelayQueue,
+                Binding.DestinationType.QUEUE,orderEventExchange,orderCloseDelayRoutingKey,null);
+    }
+    /**
+     * 死信队列和死信交换机建立绑定关系
+     * @return
+     */
+    @Bean
+    public Binding orderCloseBinding(){
+
+        return new Binding(orderCloseQueue,
+                Binding.DestinationType.QUEUE,orderEventExchange,orderCloseRoutingKey,null);
     }
 
-    // 绑定队列1到交换机
-    @Bean
-    public Binding fanoutBinding1(Queue fanoutQueue1, FanoutExchange fanoutExchange){
-        return BindingBuilder
-                .bind(fanoutQueue1)
-                .to(fanoutExchange);
-    }
 
-    // fanout.queue2
-    @Bean
-    public Queue fanoutQueue2(){
-        return new Queue("Blue.queue2");
-    }
-
-    // 绑定队列2到交换机
-    @Bean
-    public Binding fanoutBinding2(Queue fanoutQueue2, FanoutExchange fanoutExchange){
-        return BindingBuilder
-                .bind(fanoutQueue2)
-                .to(fanoutExchange);
-    }
 
 }

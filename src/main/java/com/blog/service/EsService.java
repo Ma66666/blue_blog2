@@ -55,4 +55,6 @@ public interface EsService {
     */
    Map<String,Object> queryEsBlogListByCondition(int pagenum,int pagesize,HttpServletRequest httpServletRequest,String searchData);
 
+   Map<String,Object> queryEsUserListByCondition(int pagenum,int pagesize,HttpServletRequest httpServletRequest,String searchData);
+
 }

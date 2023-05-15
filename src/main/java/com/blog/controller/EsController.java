@@ -44,4 +44,13 @@ public class EsController {
                                         ){
         return Result.ok(esService.queryEsBlogListByCondition(pagenum,size,httpServletRequest,condition));
     }
+
+//    @GetMapping("getEsUseristByCondition")
+//    public Result EsUserListByCondition(@RequestParam(value = "page")int pagenum,
+//                                        @RequestParam("size") int size,
+//                                        HttpServletRequest httpServletRequest,
+//                                        @RequestParam("condition")  String condition
+//    ){
+//        return Result.ok(esService.queryEsUserListByCondition(pagenum,size,httpServletRequest,condition));
+//    }
 }

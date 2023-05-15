@@ -23,11 +23,19 @@ public class ChatMessage {
 
     @ApiModelProperty(value = "发送内容")
     private String message;
-
-
     @ApiModelProperty(value = "创建时间")
      private Date createTime;
     @ApiModelProperty(value = "状态：0未读,1以读,2删除")
     private int status;
+
+    @ApiModelProperty(value = "0-消息;1-赞消息;2-回复消息;3-关注消息;4-系统通知")
+    private int type;
+
+    @ApiModelProperty(value = "博客Id")
+    private int blogId;
+
+    @ApiModelProperty(value = "评论Id")
+    private int commentId;
+
 
 }

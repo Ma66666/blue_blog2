@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.GroupMessageMapper">
+    <insert id="insertChatMessage">
+        insert into groupmessage (accountId,chatNumber,message,create_time)
+        values (
+                #{accountId},#{chatNumber},#{message},#{createTime}
+               )
+
+    </insert>
+
+
+    <select id="queryGroupList" resultType="com.blog.entity.GroupMessage">
+        select * from groupmessage where id in(
+            select max(id) from groupmessage
+            where chatNumber = #{chatNumber}
+            )
+    </select>
+    <select id="queryChatMessageList" resultType="com.blog.entity.GroupMessage">
+        select * from groupmessage where
+            chatNumber = #{chatNumber} order by create_time asc;
+    </select>
+
+</mapper>

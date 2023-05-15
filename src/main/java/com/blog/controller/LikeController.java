@@ -42,9 +42,9 @@ public class LikeController {
 
     @ApiOperation("用户点赞评论")
     @PostMapping(value="CommentLike")
-    public Result CommentLike(@RequestParam(value = "commentId") int id,HttpServletRequest httpServletRequest){
+    public Result CommentLike(@RequestParam(value = "commentId") int id,@RequestParam(value = "blogId") int blogId,HttpServletRequest httpServletRequest){
         String AccountId = getTokenAccountId.getTokenAccountId(httpServletRequest);
-        likeService.CommentLike(id,AccountId);
+        likeService.CommentLike(id,blogId,AccountId);
         return Result.ok("ok");
     }
 

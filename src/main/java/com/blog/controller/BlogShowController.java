@@ -150,4 +150,10 @@ public class BlogShowController {
         return Result.ok(urlService.queryMessageList());
     }
 
+    @ApiOperation("获得活动页页列表")
+    @GetMapping("/getActivityUrlList")
+    public Result getActivityUrlList(){
+        return Result.ok(urlService.queryActivityList());
+    }
+
 }

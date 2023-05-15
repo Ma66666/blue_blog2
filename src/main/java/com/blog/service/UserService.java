@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -26,4 +27,6 @@ public interface UserService {
     boolean updateHeaderUrl(MultipartFile headerImage, HttpServletRequest request) throws IOException;//修改用户头像
 
     UserVo queryUserInfo(String accountId);
+
+    List<UserVo> queryUserList(String condition);
 }

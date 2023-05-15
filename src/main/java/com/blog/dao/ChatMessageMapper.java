@@ -2,6 +2,8 @@ package com.blog.dao;
 
 import com.blog.entity.Bo.MessageCountBo;
 import com.blog.entity.ChatMessage;
+
+import com.blog.entity.Vo.NoticeVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,4 +24,25 @@ public interface ChatMessageMapper {
 
     //点击用户会话，清除消息状态
     int updataChatMessageStatus(String user1_user2);
+
+    //插入提示消息（包括点赞，评论，回复）
+    int insertNotice(ChatMessage chatMessage);
+
+    //查询用户收到的赞信息
+    List<NoticeVo> queryZanNoticeVo(String accountId);
+
+    //查询用户收到的评论信息
+    List<NoticeVo> queryCommentNoticeVo(String accountId);
+
+    //查询用户收到关注信息
+    List<NoticeVo> queryLikeNoticeVo(String accountId);
+
+    //查询用户收到系统消息
+    List<NoticeVo> querySystemNoticeVo(String accountId);
+
+    int updataSystem(int id);
+
+
+
+
 }

@@ -11,7 +11,7 @@ public interface LikeService {
 
     void Bloglike(int blogId,String accountId);
 
-    void CommentLike(int id,String accountId);
+    void CommentLike(int id,int blogId,String accountId);
 
     void BlogCollect(int blogId,String accountId);
 

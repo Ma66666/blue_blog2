@@ -40,6 +40,8 @@ public class Comment {
     @ApiModelProperty(value = "点赞总数")
     private int likeCount;
 
+    private int status;
+
 
 
 

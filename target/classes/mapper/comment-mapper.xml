@@ -5,7 +5,7 @@
 <mapper namespace="com.blog.dao.CommentMapper">
 
     <sql id="insertFields">
-        parent_id, blog_id, accountId, content, user_type, create_time, reply_user_id, reply_user_name,like_count
+        parent_id, blog_id, accountId, content, user_type, create_time, reply_user_id, reply_user_name,like_count,status
     </sql>
 
     <sql id="selectFields">
@@ -14,7 +14,7 @@
 
     <insert id="insertComment" parameterType="Comment" keyProperty="id">
         insert into comment (<include refid="insertFields"></include>) values (
-           #{parentId} ,#{blogId},#{accountId},#{content},#{userType},#{createTime},#{replyUserId},#{replyUserName},#{likeCount}
+           #{parentId} ,#{blogId},#{accountId},#{content},#{userType},#{createTime},#{replyUserId},#{replyUserName},#{likeCount},#{status}
         );
 
     </insert>
@@ -29,12 +29,17 @@
 
 
     <delete id="deleteComment"></delete>
-    <select id="queryComment"  resultType="com.blog.entity.Vo.CommentVo">
+    <select id="queryCommentList"  resultType="com.blog.entity.Vo.CommentVo">
         select c.id,c.parent_id,c.blog_id,c.accountId,c.content,c.user_type,c.reply_user_id,c.reply_user_name,c.create_time,u.header_url,u.username,c.like_count
-        from comment c left join user u on c.accountId = u.accountId where c.blog_id = #{blogId} and c.parent_id = #{parentId} order by c.create_time asc;
+        from comment c left join user u on c.accountId = u.accountId where c.blog_id = #{blogId} and c.parent_id = #{parentId} and c.status =0  order by c.create_time asc;
     </select>
 
     <select id="queryCommentCount" resultType="java.lang.Integer">
           select count(*) from comment where blog_id = #{blogId}
+    </select>
+
+    <select id="queryComment" resultType="com.blog.entity.Vo.CommentVo">
+        select c.id,c.parent_id,c.blog_id,c.accountId,c.content,c.user_type,c.reply_user_id,c.reply_user_name,c.create_time,u.header_url,u.username,c.like_count
+        from comment c left join user u on c.accountId = u.accountId where c.id = #{commentId}
     </select>
 </mapper>

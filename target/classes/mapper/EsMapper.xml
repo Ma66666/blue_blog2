@@ -27,4 +27,7 @@
           #{item}
       </foreach>
     </select>
+    <select id="queryUser" resultType="com.blog.dao.es.UserEsVo">
+        select * from user where status = '0';
+    </select>
 </mapper>

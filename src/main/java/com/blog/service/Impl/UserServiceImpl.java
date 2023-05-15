@@ -19,10 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.blog.util.result.ResultCodeEnum.*;
 
@@ -123,7 +120,7 @@ public class UserServiceImpl implements UserService {
             userVo.setCreateTime(user.getCreateTime());
             userVo.setSex(user.getSex());
             userVo.setStatus(user.getStatus());
-            userVo.setSignature(user.getPSignature());
+            userVo.setPSignature(user.getPSignature());
             getSetRedis.setToken(token,userVo);
             Map<String,Object>map = new HashMap<>();
             map.put("token",token);
@@ -150,7 +147,7 @@ public class UserServiceImpl implements UserService {
         userVo.setCreateTime(user.getCreateTime());
         userVo.setSex(user.getSex());
         userVo.setStatus(user.getStatus());
-        userVo.setSignature(user.getPSignature());
+        userVo.setPSignature(user.getPSignature());
         getSetRedis.setToken(token,userVo);
     }
 
@@ -223,6 +220,11 @@ public class UserServiceImpl implements UserService {
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user,userVo);
         return userVo;
+    }
+
+    @Override
+    public List<UserVo> queryUserList(String condition) {
+        return userMapper.queryUserlIST(condition);
     }
 
 

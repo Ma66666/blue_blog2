@@ -10,6 +10,9 @@
         select * from url where id &gt;= 101 and id &lt;=200 ;
     </select>
     <select id="getMessageUrl" resultType="com.blog.entity.Url">
-        select * from url where id &gt;= 201 ;
+        select * from url where id &gt;= 201 and  id &lt;=300;
+    </select>
+    <select id="getActivityUrl" resultType="com.blog.entity.Url">
+        select * from url where id &gt;= 301 ;
     </select>
 </mapper>

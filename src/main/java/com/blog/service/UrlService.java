@@ -10,4 +10,6 @@ public interface UrlService {
     List<Url> querySearchList();
 
     List<Url> queryMessageList();
+
+    List<Url> queryActivityList();
 }

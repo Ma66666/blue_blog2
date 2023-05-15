@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.ActivityListMapper">
+    <insert id="insertActivityList">
+        insert  into activitylist (accountId,activity_id,status,phone,create_time,name,order_id) values (#{accountId},#{activityId},#{status},#{phone},#{createTime},#{name},#{orderId})
+    </insert>
+    <update id="updateOrder">
+        update activitylist set status = 2 where order_id =#{orderId}
+    </update>
+    <update id="updatePayOrder">
+        update activitylist set status = 1 where order_id =#{orderId}
+    </update>
+    <update id="updateDrawBackOrder">
+        update activitylist set status = 3 where order_id =#{orderId}
+    </update>
+
+    <update id="setOrderStatus">
+        update activitylist set status = 4 where activity_id = #{id};
+    </update>
+
+    <select id="queryActivityOrderList" resultType="com.blog.entity.Vo.ActivityListVo">
+        select a.id,activity_cover,activity_id,activity_name,activity_info,a.status,activity_accountId,price,begin_time,place,a.create_time,a.order_Id
+         from activitylist a left join activity  aa on a.activity_id = aa.id where accountId = #{accountId} and a.status = 0
+    </select>
+    <select id="queryEndActivityOrderList" resultType="com.blog.entity.Vo.ActivityListVo">
+        select a.id,activity_cover,activity_id,activity_name,activity_info,a.status,activity_accountId,price,begin_time,place,a.create_time,a.order_Id
+        from activitylist a left join activity  aa on a.activity_id = aa.id where accountId = #{accountId} and a.status = 2
+    </select>
+    <select id="queryOrderIndex" resultType="com.blog.entity.Vo.ActivityListVo">
+        select a.id,activity_cover,activity_id,activity_name,activity_info,a.status,activity_accountId,price,begin_time,place,a.create_time,a.order_Id
+        from activitylist a left join activity  aa on a.activity_id = aa.id where order_id = #{orderId}
+    </select>
+    <select id="getOrderInfo" resultType="com.blog.entity.Activitylist">
+        select * from activitylist where order_id = #{orderId}
+    </select>
+    <select id="querySuccessOrderList" resultType="com.blog.entity.Vo.ActivityListVo">
+        select a.id,activity_cover,activity_id,activity_name,activity_info,a.status,activity_accountId,price,begin_time,place,a.create_time,a.order_Id
+        from activitylist a left join activity  aa on a.activity_id = aa.id where accountId = #{accountId} and ( a.status = 1 or a.status = 3)
+    </select>
+    <select id="queryJoinSuccess" resultType="com.blog.entity.Vo.ActivityListVo">
+        select a.id,activity_cover,activity_id,activity_name,activity_info,a.status,activity_accountId,price,begin_time,place,a.create_time,a.order_Id
+        from activitylist a left join activity  aa on a.activity_id = aa.id
+        where accountId = #{accountId} and a.status = 1 and DATE_FORMAT(NOW(), '%Y-%m-%d') >activityend_time
+    </select>
+    <select id="queryCountOrder" resultType="java.lang.Integer">
+        select count(*) from activitylist where activity_id = #{id}
+    </select>
+
+
+</mapper>
